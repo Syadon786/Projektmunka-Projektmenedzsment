@@ -1,0 +1,6 @@
+@media screen and (max-width: 1360px) {
+    .App .content {
+        padding-left: 110px;
+        box-sizing: border-box;
+    }
+}

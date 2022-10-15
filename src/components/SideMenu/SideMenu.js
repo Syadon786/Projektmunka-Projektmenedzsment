@@ -8,7 +8,8 @@ import MenuItem from '../MenuItem/MenuItem';
 
 const SideMenu = () => {
     const [active, setActive] = useState(false);
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
+    //  onClick={() => navigate("/home")}
 
     const SideMenuConfig = {
         inactive:  {
@@ -47,18 +48,14 @@ const SideMenu = () => {
         <div className="divider"/>
         <div className="main-menu">
             <ul>
-                <MenuItem label="Dashboard" iconName="speedometer2" menuStatus={active} 
-                onClick={() => navigate("/home")}/>
+                <MenuItem path="/home" label="Dashboard" iconName="speedometer2" menuStatus={active} />
                 <MenuItem label="Content" iconName="newspaper" menuStatus={active}>
-                    <MenuItem submenu label="Tree demo" iconName="bar-chart-steps" menuStatus={active}
-                    onClick={() => navigate("/tree")}
-                    />
+                    <MenuItem path="/tree" submenu label="Tree demo" iconName="bar-chart-steps" menuStatus={active}/>
                     <MenuItem submenu menuStatus={active}
                     onClick={() => alert("Just a dummy")}
                     />
                 </MenuItem>
-                <MenuItem label="Not found test" iconName="bug" menuStatus={active} 
-                onClick={() => navigate("/notfound")}/>
+                <MenuItem path="/notfound" label="Not found test" iconName="bug" menuStatus={active} />
             </ul>
         </div>
        

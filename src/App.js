@@ -10,8 +10,8 @@ import "./App.css";
 
 const App = () => {
   return (
+    <div className="App"> 
     <Router>
-    <div className="App">
     <Navbar/>
     <div className="content">
       <Routes>
@@ -23,8 +23,8 @@ const App = () => {
         <Route path="*" element={<Navigate to="/notfound" replace />} />
       </Routes>
     </div>
+    </Router>
   </div>
-  </Router>
   )
 }
 

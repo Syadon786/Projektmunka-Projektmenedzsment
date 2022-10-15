@@ -62,10 +62,10 @@ const SideMenu = () => {
             <div className="avatar">
                 <img src={faker.image.avatar()} alt="user profile-pic"/>            
             </div>
-            {active ? <div className="user-info">
+            <div className={`user-info ${active ? "active" : ""}`}>
                     <h5>{faker.name.fullName()}</h5>
                     <p>{faker.internet.email()}</p>
-            </div> : null}                     
+            </div>                     
         </div>
     </div>
     )

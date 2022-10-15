@@ -82,6 +82,8 @@
 
 .main-menu ul {
     padding: 0;
+    white-space:nowrap;
+    overflow:hidden;
 }
 
 .side-menu-footer  {
@@ -93,7 +95,8 @@
     left: 0;
     padding: 30px 20px;
     box-sizing: border-box;
-
+    white-space:nowrap;
+    overflow:hidden;
 }
 
 
@@ -109,11 +112,17 @@
     max-width: 100%;
 }
 
-.user-info {
+.user-info.active {
     display: inline-block;
     max-height: 100%;
     margin: 0 10px;
     color: white;
+    opacity: 1;
+    transition: opacity .3s ease-in;
+}
+
+.user-info {
+    opacity: 0;
 }
 
 .user-info h5 {

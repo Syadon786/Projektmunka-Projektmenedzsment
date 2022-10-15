@@ -66,13 +66,15 @@ const SideMenu = () => {
         </div>
        
         <div className="side-menu-footer">
-            <div className="avatar">
-                <img src={dummyUser.picture} alt="user profile-pic"/>            
-            </div>
-            <div className={`user-info ${active ? "active" : ""}`}>
-                    <h5>{dummyUser.name}</h5>
-                    <p>{dummyUser.email}</p>
-            </div>                     
+            <div className="user-container">
+                <div className="avatar">
+                    <img src={dummyUser.picture} alt="user profile-pic"/>            
+                </div>
+                <div className={`user-info ${active ? "active" : ""}`}>
+                        <h5>{dummyUser.name}</h5>
+                        <p>{dummyUser.email}</p>
+                </div>      
+            </div>               
         </div>
     </div>
     )

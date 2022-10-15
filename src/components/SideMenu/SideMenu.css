@@ -26,6 +26,7 @@
     height: 40px;
     overflow: hidden;
     display: inline-block;
+    text-align: center;
 }
 
 .logo img {
@@ -100,23 +101,24 @@
     overflow:hidden;
 }
 
-
 .avatar {
     width: 40px;
     height: 40px;
     overflow: hidden;
     border-radius: 50%;
     display: inline-block;
+    vertical-align: top;
 }
 
 .avatar img {
     max-width: 100%;
+    
 }
 
 .user-info.active {
     display: inline-block;
-    max-height: 100%;
     margin: 0 10px;
+    max-height: 100%;
     color: white;
     opacity: 1;
     transition: opacity .3s ease-in;
@@ -132,4 +134,5 @@
 
 .user-info p {
     font-size: 10px;
+    margin: 0;
 }

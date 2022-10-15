@@ -2,13 +2,17 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 const Button = ({children, color = "primary", ...props}) => {
+  const BtnConfig = {
+    primary: "btn-primary",
+    secondary: "btn-secondary",
+    danger: "btn-danger",
+    dark: "btn-dark",
+    darkOutline: "btn-outline-dark"
+  }
+
   return (
-    <button className={`btn 
-        ${color === "primary" ? "btn-primary" : ""}
-        ${color === "secondary" ? "btn-secondary" : ""}
-        ${color === "danger" ? "btn-danger" : ""}
-    `}
-    {...props}
+    <button className={`btn ${BtnConfig[color]}`}
+    {...props}  
     >
     {children}
     </button>

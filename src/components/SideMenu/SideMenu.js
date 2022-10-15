@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import { faker } from "@faker-js/faker";
 
 import "./SideMenu.css";
@@ -7,8 +7,15 @@ import MenuItem from '../MenuItem/MenuItem';
 
 const SideMenu = () => {
     const [active, setActive] = useState(false);
-    // const navigate = useNavigate();
-    //  onClick={() => navigate("/home")}
+    const [dummyUser, setDummyUser] = useState({});
+    
+    useEffect(() => {
+        setDummyUser({
+            picture: faker.image.avatar(),
+            name: faker.name.fullName(),
+            email: faker.internet.email()
+        });
+    }, []);
 
     const SideMenuConfig = {
         inactive:  {
@@ -60,11 +67,11 @@ const SideMenu = () => {
        
         <div className="side-menu-footer">
             <div className="avatar">
-                <img src={faker.image.avatar()} alt="user profile-pic"/>            
+                <img src={dummyUser.picture} alt="user profile-pic"/>            
             </div>
             <div className={`user-info ${active ? "active" : ""}`}>
-                    <h5>{faker.name.fullName()}</h5>
-                    <p>{faker.internet.email()}</p>
+                    <h5>{dummyUser.name}</h5>
+                    <p>{dummyUser.email}</p>
             </div>                     
         </div>
     </div>

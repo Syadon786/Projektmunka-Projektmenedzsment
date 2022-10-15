@@ -6,6 +6,7 @@
     box-sizing: border-box;
     padding: 30px 20px;
     transition: width .2s ease-in;
+    z-index: 1;
 }
 
 .side-menu.inactive {

@@ -3,10 +3,12 @@ import { BrowserRouter as Router, Routes, Route, Link, Navigate} from "react-rou
 
 import HomePage from './pages/HomePage/HomePage';
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
+import Navbar from './components/Navbar/Navbar';
 
 const App = () => {
   return (
     <Router>
+    <Navbar/>
     <div className="App">
     <header className="App-header">
       {/* <Navbar/> */}

@@ -1,0 +1,11 @@
+.bar-btn {
+    height: 35px;
+    width: 35px;
+    background-color: white;
+    padding: 0;
+    border: none;
+}
+
+.bar-btn:hover {
+    cursor: default;
+}

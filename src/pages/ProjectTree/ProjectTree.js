@@ -13,7 +13,7 @@ const ProjectTree = () => {
   ])
 
   useEffect(() => {
-    console.log(treeData);
+    //console.log(treeData);
   });
 
   return (
@@ -22,6 +22,14 @@ const ProjectTree = () => {
           treeData={treeData}
           onChange={((treeData) => {setTreeData(treeData)})}
           isVirtualized={false}
+          canDrag={({treeIndex}) => {if(treeIndex !== 0) 
+                                          return true;
+                                     return false;     
+                                    }}
+          canDrop={({nextPath}) => {if(nextPath.length === 1) 
+                                    return false;
+                                    return true;
+          }}                          
         />
     </Page>
   )

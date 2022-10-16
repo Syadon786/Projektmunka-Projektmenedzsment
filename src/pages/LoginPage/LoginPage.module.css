@@ -1,0 +1,22 @@
+.loginIcon {
+    height: 20px;
+    margin-bottom: 3px;
+    margin-right: 5px;
+    background: white;
+}
+
+.loginBtn {
+    display: inline-block;
+    height: 100%;
+}
+
+.loginWindow {
+    width: 100%;
+    position: absolute;
+    top: 40%;
+    transform: translateY(-40%);
+}
+
+.loginContainer {
+    position: relative;
+}

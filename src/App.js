@@ -5,6 +5,7 @@ import HomePage from './pages/HomePage/HomePage';
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
 import Navbar from './components/Navbar/Navbar';
 import ProjectTree from './pages/ProjectTree/ProjectTree';
+import LoginPage from './pages/LoginPage/LoginPage';
 
 import "./App.css";
 
@@ -12,10 +13,13 @@ const App = () => {
   return (
     <div className="App"> 
     <Router>
-    <Navbar/>
+    <header className="App-header">
+        <Navbar/>
+    </header>
     <div className="content">
       <Routes>
         <Route path="/home" element={<HomePage />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/tree" element={<ProjectTree />} />
         <Route path="/notfound" element={<NotFoundPage />} />
 

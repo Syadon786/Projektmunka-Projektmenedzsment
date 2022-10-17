@@ -9,3 +9,11 @@
 .bar-btn:hover {
     cursor: default;
 }
+
+.bar {
+    transition: all 0.2s ease-in-out;  
+}
+
+.bar:hover {
+    transform: scale(3);
+}

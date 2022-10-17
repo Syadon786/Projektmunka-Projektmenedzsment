@@ -1,0 +1,8 @@
+.rst__node {
+    z-index: 0;
+}
+
+.rst__node:hover {
+    z-index: 1;
+}
+

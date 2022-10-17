@@ -7,6 +7,7 @@ import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 
 import './ProjectTree.css';
+import '../../styles/ProjectTree.css';
 
 const ProjectTree = () => {
   const [treeData, setTreeData] = useState([
@@ -37,7 +38,7 @@ const ProjectTree = () => {
           }}                
           generateNodeProps={(rowInfo) => ({
             buttons: [
-              <button className="bar-btn"><CircularProgressbar value={0.66} maxValue={1} text="66%"/></button>,
+              <button className="bar-btn"><CircularProgressbar className='bar' value={0.66} maxValue={1} text="66%"/></button>,
             ]
           })}
         />

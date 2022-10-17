@@ -5,6 +5,10 @@ const Button = ({children, color = "primary", className, ...props}) => {
   const BtnConfig = {
     primary: "btn-primary",
     secondary: "btn-secondary",
+    success: "btn-success",
+    warning: "btn-warning",
+    info: "btn-info",
+    light: "btn-light",
     danger: "btn-danger",
     dark: "btn-dark",
     darkOutline: "btn-outline-dark",

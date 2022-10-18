@@ -82,10 +82,28 @@
     background-color: #333;
 }
 
-.main-menu ul {
+.side-menu .main-menu {
+    height: 75%;
+}
+
+.side-menu.inactive .main-menu {
+    height: 80%;    
+}
+
+ul {
     padding: 0;
+}
+
+.main-menu ul:only-child {
+    height: 100%;
     white-space:nowrap;
+    display: flex;
+    flex-direction: column;
     overflow:hidden;
+}
+
+.main-menu ul > :last-child {
+    margin-top: auto;
 }
 
 .side-menu-footer  {

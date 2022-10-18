@@ -62,6 +62,7 @@ const SideMenu = () => {
                     />
                 </MenuItem>
                 <MenuItem path="/notfound" label="Not found test" iconName="bug" menuStatus={active} />
+                <MenuItem path="/login"  label="Log in" iconName="door-open" menuStatus={active}/>
             </ul>
         </div>
        

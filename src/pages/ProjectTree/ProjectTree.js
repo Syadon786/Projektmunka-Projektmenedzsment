@@ -17,9 +17,26 @@ const ProjectTree = () => {
     ] }
   ])
 
+  const demoDrawTreeDataState = (data) => {
+    return(
+      <ol>{
+         data.map(node => {
+            if(node.children)
+              return <li key={node.title}>{node.title}<ol>{demoDrawTreeDataState(node.children)}</ol></li>          
+            else return <li key={node.title}>{node.title}</li>            
+         })
+        }
+      </ol>
+    );
+  }
+
+
+
   useEffect(() => {
-    //console.log(treeData);
-  });
+
+  }, [treeData]);
+
+  
 
   return (
     <Page title="Project tree" noCard>
@@ -42,8 +59,13 @@ const ProjectTree = () => {
             ]
           })}
         />
+        <div className="DEMO card mt-4 p-4">TreeData state: csak hogy monitorozni lehessen fejlesztés közben a TreeData objektum felépítését
+          {demoDrawTreeDataState(treeData)}
+        </div>
     </Page>
   )
+
+ 
 }
 
 export default ProjectTree

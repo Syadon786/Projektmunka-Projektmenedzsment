@@ -1,7 +1,6 @@
 .menu-item {
     color: #666;
     text-decoration: none;
-    font-size: 16px;
     display: block;
     font-weight: 600;
 }
@@ -25,16 +24,16 @@
     border-left: 1px solid #333;
     color: #666;
     text-decoration: none;
-    font-size: 14px;
     display: block;
     font-weight: 600;
 }
 
 .submenu-icon {
     display: inline-block;
+    max-height: 100%;
+    font-size: 16px;
     width:  40px;
     height: 40px;
-    font-size: 16px;
     line-height: 40px;
     text-align: center;
 }

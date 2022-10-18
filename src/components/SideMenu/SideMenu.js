@@ -46,9 +46,9 @@ const SideMenu = () => {
         </div>
 
         <div className="project-selector">
-            <select>
-                <option selected>Project</option>    
-                <option>Dummy project</option>    
+            <select defaultValue={"Project"}>
+                <option value="Project">Project</option>    
+                <option value="Dummy project">Dummy project</option>    
             </select>         
         </div>
         <div className="divider"/>

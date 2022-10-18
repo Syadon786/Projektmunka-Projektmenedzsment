@@ -45,11 +45,11 @@ const SideMenu = () => {
             </div>
         </div>
 
-        <div className="search-controller">
-            <button className="search-menu-btn">
-                <i className="bi bi-search"></i>
-            </button>
-            <input type="text" placeholder="search"></input>         
+        <div className="project-selector">
+            <select>
+                <option selected>Project</option>    
+                <option>Dummy project</option>    
+            </select>         
         </div>
         <div className="divider"/>
         <div className="main-menu">

@@ -13,7 +13,7 @@
     width: 80px;
 }
 
-.side-menu.inactive .search-controller {
+.side-menu.inactive .project-selector {
    display: none;
 }
 
@@ -47,21 +47,11 @@
     cursor: pointer;
 }
 
-.search-controller {
+.project-selector {
     position: relative;
 }
 
-.search-menu-btn  {
-    position: absolute;
-    background: transparent;
-    border: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    right: 0;
-    color: white;
-}
-
-.search-controller input {
+.project-selector select {
     border: 0;
     outline: 0;
     height: 35px;

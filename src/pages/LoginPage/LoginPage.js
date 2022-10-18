@@ -14,19 +14,19 @@ const LoginPage = () => {
                 <div className="card">
                     <div className="card-header">Log in or Sign up</div>
                     <div className="card-body">
-                    <div className="mb-2">Sign in with Google:</div>
+                    <div className="mb-2">Already a member? Log in with Google</div>
                     <div className="d-grid gap-2">
                         <Button color="light">
                             <div className={classes.loginBtn}>
-                                <img className={classes.loginIcon} src={googleLogo} alt="login logo"/>Sign in with Google
+                                <img className={classes.loginIcon} src={googleLogo} alt="login logo"/>Log in with Google
                             </div>
                         </Button>
                     </div>
-                    <div className="mb-2 mt-2">Already a member? Log in with Google</div>
+                    <div className="mb-2 mt-2">Sign up with Google:</div>
                     <div className="d-grid gap-2">
                         <Button>
                             <div className={classes.loginBtn}>
-                                <img className={classes.loginIcon} src={googleLogo} alt="login logo"/>Log in with Google
+                                <img className={classes.loginIcon} src={googleLogo} alt="login logo"/>Sign up with Google
                             </div>
                         </Button>
                     </div>

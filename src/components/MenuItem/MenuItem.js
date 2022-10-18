@@ -15,7 +15,8 @@ const MenuItem = ({iconName="bucket", path, label="Dummy option", submenu, menuS
             </div>
             <span className={`menu-text ${active}`}>{menuStatus ? label : null}</span>
         </Link>
-        {children && collapsed ? null : <ul>{children}</ul>}
+        {children ? collapsed ? null : <ul>{children}</ul>: null}
+        
     </li>
   )
 }

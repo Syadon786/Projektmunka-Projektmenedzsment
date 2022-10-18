@@ -1,19 +1,13 @@
 .bar-btn {
     height: 35px;
     width: 35px;
-    background-color: white;
+    background-color: transparent;
     padding: 0;
     border: none;
+    transition: all 0.2s ease-in-out;  
 }
 
 .bar-btn:hover {
     cursor: default;
-}
-
-.bar {
-    transition: all 0.2s ease-in-out;  
-}
-
-.bar:hover {
     transform: scale(3);
 }

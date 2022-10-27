@@ -9,7 +9,7 @@ import 'react-circular-progressbar/dist/styles.css';
 import './ProjectTree.css';
 import '../../styles/ProjectTree.css';
 
-const ProjectTree = () => {
+const ProjectTree = ({actProject}) => {
   const [treeData, setTreeData] = useState([
     { title: 'Project', root: true, children: [
       { title: 'Frontend' , children: [{title : "UI"}]},
@@ -30,16 +30,23 @@ const ProjectTree = () => {
     );
   }
 
-
+  useEffect(() => {
+    console.dir(treeData);
+  }, [treeData]);
 
   useEffect(() => {
-
-  }, [treeData]);
+    setTreeData([
+      { title: actProject.label, root: true, children: [
+        { title: 'Frontend' , children: [{title : "UI"}]},
+        { title: 'Backend' , children: [{title : "Authentication"}]}
+      ] }
+    ]);
+  }, [actProject]);
 
   
 
   return (
-    <Page title="Project tree" noCard>
+    <Page title={actProject.label} noCard>
         <SortableTree
           treeData={treeData}
           onChange={((treeData) => {setTreeData(treeData)})}

@@ -4,10 +4,18 @@ import { faker } from "@faker-js/faker";
 import "./SideMenu.css";
 import logo from "../../assets/react-2.svg";
 import MenuItem from '../MenuItem/MenuItem';
+import Select from '../Select/Select';
 
-const SideMenu = () => {
+const SideMenu = ({onProjectChange}) => {
     const [active, setActive] = useState(false);
     const [dummyUser, setDummyUser] = useState({});
+
+
+    
+    const dummySelectorData = [{value: "#0123", label: "Project"},
+        {value: "#3210", label: "Dummy project"}
+    ]
+
     
     useEffect(() => {
         setDummyUser({
@@ -50,12 +58,10 @@ const SideMenu = () => {
             </div>
         </div>
 
-        <div className="project-selector">
-            <select defaultValue={"Project"}>
-                <option value="Project">Project</option>    
-                <option value="Dummy project">Dummy project</option>    
-            </select>         
-        </div>
+        <Select values={dummySelectorData} 
+        callback={(value) => {onProjectChange(value)}} 
+        selected={dummySelectorData[0]}/>
+
         <div className="divider"/>
         <div className="main-menu">
             <ul>

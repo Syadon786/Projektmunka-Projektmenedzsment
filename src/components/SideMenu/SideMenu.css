@@ -69,8 +69,16 @@
     overflow:hidden;
 } 
 
+@media screen and (max-height: 500px) {
+    .side-menu .main-menu {
+        height: 64%;
+    }
+    .side-menu.inactive .main-menu {
+        height: 60%;    
+    }
+}
 
-@media screen and (max-height: 650px) {
+@media screen and (max-height: 650px) and (min-height: 501px) {
     .side-menu .main-menu {
         height: 64%;
     }
@@ -78,8 +86,6 @@
     .side-menu.inactive .main-menu {
         height: 70%;    
     }
-
- 
 }
 
 @media screen and (min-height: 651px) {

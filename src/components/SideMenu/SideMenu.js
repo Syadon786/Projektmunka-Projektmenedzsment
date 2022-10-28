@@ -6,7 +6,7 @@ import logo from "../../assets/react-2.svg";
 import MenuItem from '../MenuItem/MenuItem';
 import Select from '../Select/Select';
 
-const SideMenu = ({onProjectChange}) => {
+const SideMenu = () => {
     const [active, setActive] = useState(false);
     const [dummyUser, setDummyUser] = useState({});
 
@@ -59,7 +59,6 @@ const SideMenu = ({onProjectChange}) => {
         </div>
 
         <Select values={dummySelectorData} 
-        callback={(value) => {onProjectChange(value)}} 
         selected={dummySelectorData[0]}/>
 
         <div className="divider"/>

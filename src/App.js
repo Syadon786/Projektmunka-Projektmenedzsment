@@ -9,8 +9,10 @@ import LoginPage from './pages/LoginPage/LoginPage';
 import "./App.css";
 import SideMenu from './components/SideMenu/SideMenu';
 
+import { ProjectContext } from './contexts/ProjectContext';
+
 const App = () => {
-  const [actProject, setActProject] = useState({value: "Project", label: "Project"});
+  const [actProject, setActProject] = useState({value: "#0123", label: "Project"});
   useEffect(() => {
     console.log(actProject);
   }, [actProject]) 
@@ -19,8 +21,9 @@ const App = () => {
     <div className="App"> 
     <Router>
     <header className="App-header">
-        <SideMenu onProjectChange={(value) => {setActProject(value)
-        }}/>
+      <ProjectContext.Provider value={setActProject}>
+          <SideMenu/>
+      </ProjectContext.Provider>
     </header>
     <div className="content">
       <Routes>

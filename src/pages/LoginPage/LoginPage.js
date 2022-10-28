@@ -6,6 +6,10 @@ import classes from "./LoginPage.module.css";
 import googleLogo from  "../../assets/icons8-google-48.png";
 
 const LoginPage = () => {
+  const login = () => {
+    window.open('http://localhost:3001/auth/google', "_self");
+  } 
+
   return (
     <Page title="Login" noCard>
         <div className={`${classes.loginContainer} container align-items-center justify-content-center vh-100`}>
@@ -14,19 +18,11 @@ const LoginPage = () => {
                 <div className="card">
                     <div className="card-header">Log in or Sign up</div>
                     <div className="card-body">
-                    <div className="mb-2">Already a member? Log in with Google</div>
+                    <div className="mb-2 text-center">Already a member? Log in with Google otherwise Sign up and create an account.</div>
                     <div className="d-grid gap-2">
-                        <Button color="light">
+                        <Button onClick={login}>
                             <div className={classes.loginBtn}>
-                                <img className={classes.loginIcon} src={googleLogo} alt="login logo"/>Log in with Google
-                            </div>
-                        </Button>
-                    </div>
-                    <div className="mb-2 mt-2">Sign up with Google:</div>
-                    <div className="d-grid gap-2">
-                        <Button>
-                            <div className={classes.loginBtn}>
-                                <img className={classes.loginIcon} src={googleLogo} alt="login logo"/>Sign up with Google
+                                <img className={classes.loginIcon} src={googleLogo} alt="login logo"/>Log in or Sign up with Google
                             </div>
                         </Button>
                     </div>

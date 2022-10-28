@@ -1,5 +1,6 @@
-import React, {useEffect, useState} from 'react'
-import { faker } from "@faker-js/faker";
+import React, {useEffect, useState, useContext} from 'react'
+import { userContext } from '../../contexts/UserContext';
+//import { faker } from "@faker-js/faker";
 
 import "./SideMenu.css";
 import logo from "../../assets/react-2.svg";
@@ -8,7 +9,8 @@ import Select from '../Select/Select';
 
 const SideMenu = () => {
     const [active, setActive] = useState(false);
-    const [dummyUser, setDummyUser] = useState({});
+    const user = useContext(userContext);
+   // const [dummyUser, setDummyUser] = useState({});
 
 
     
@@ -18,11 +20,11 @@ const SideMenu = () => {
 
     
     useEffect(() => {
-        setDummyUser({
-            picture: faker.image.avatar(),
-            name: faker.name.fullName(),
-            email: faker.internet.email()
-        });
+        // setDummyUser({
+        //     picture: faker.image.avatar(),
+        //     name: faker.name.fullName(),
+        //     email: faker.internet.email()
+        // });
 
         document.onresize = () => {
             let vh = window.innerHeight * 0.01;
@@ -79,11 +81,11 @@ const SideMenu = () => {
         <div className="side-menu-footer">
             <div className="user-container">
                 <div className="avatar">
-                    <img src={dummyUser.picture} alt="user profile-pic"/>            
+                    <img src={user ? user.photos[0].value : ""} alt="user profile-pic"/>            
                 </div>
                 <div className={`user-info ${active ? "active" : ""}`}>
-                        <h5>{dummyUser.name}</h5>
-                        <p>{dummyUser.email}</p>
+                        <h5>{user ? user.displayName : ""}</h5>
+                        {<p>{user ? user.emails[0].value : ""}</p>}
                 </div>      
             </div>               
         </div>

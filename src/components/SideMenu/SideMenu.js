@@ -1,15 +1,16 @@
-import React, {useEffect, useState, useContext} from 'react'
-import { userContext } from '../../contexts/UserContext';
+import React, {useEffect, useState} from 'react'
+
 //import { faker } from "@faker-js/faker";
 
 import "./SideMenu.css";
 import logo from "../../assets/react-2.svg";
 import MenuItem from '../MenuItem/MenuItem';
 import Select from '../Select/Select';
+import { useAuth } from '../../contexts/AuthContext';
 
 const SideMenu = () => {
     const [active, setActive] = useState(false);
-    const user = useContext(userContext);
+    const { user } = useAuth();
    // const [dummyUser, setDummyUser] = useState({});
 
 
@@ -25,7 +26,6 @@ const SideMenu = () => {
         //     name: faker.name.fullName(),
         //     email: faker.internet.email()
         // });
-
         document.onresize = () => {
             let vh = window.innerHeight * 0.01;
             document.documentElement.style.setProperty('--vh', `${vh}px`);
@@ -64,7 +64,7 @@ const SideMenu = () => {
         selected={dummySelectorData[0]}/>
 
         <div className="divider"/>
-        <div className="main-menu">
+        <nav className="main-menu">
             <ul>
                 <MenuItem path="/home" label="Dashboard" iconName="speedometer2" menuStatus={active} />
                 <MenuItem label="Content" iconName="newspaper" menuStatus={active}>
@@ -74,18 +74,18 @@ const SideMenu = () => {
                     />
                 </MenuItem>
                 <MenuItem path="/notfound" label="Not found test" iconName="bug" menuStatus={active} />
-                <MenuItem path="/login"  label="Log in" iconName="door-open" menuStatus={active}/>
+                <MenuItem path="/logout"  label="Logout" iconName="door-open" menuStatus={active}/>
             </ul>
-        </div>
+        </nav>
        
         <div className="side-menu-footer">
             <div className="user-container">
                 <div className="avatar">
-                    <img src={user ? user.photos[0].value : ""} alt="user profile-pic"/>            
+                    <img src={user ? user.photo : ""} alt="user profile-pic" referrerpolicy="no-referrer"/>            
                 </div>
                 <div className={`user-info ${active ? "active" : ""}`}>
-                        <h5>{user ? user.displayName : ""}</h5>
-                        {<p>{user ? user.emails[0].value : ""}</p>}
+                        <h5>{user ? user.name : ""}</h5>
+                        {<p>{user ? user.email : ""}</p>}
                 </div>      
             </div>               
         </div>

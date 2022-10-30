@@ -81,7 +81,7 @@ const SideMenu = () => {
         <div className="side-menu-footer">
             <div className="user-container">
                 <div className="avatar">
-                    <img src={user ? user.photo : ""} alt="user profile-pic" referrerpolicy="no-referrer"/>            
+                    <img src={user ? user.photo : ""} alt="user profile-pic" referrerPolicy="no-referrer"/>            
                 </div>
                 <div className={`user-info ${active ? "active" : ""}`}>
                         <h5>{user ? user.name : ""}</h5>

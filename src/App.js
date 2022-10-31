@@ -16,11 +16,16 @@ import { useAuth } from './contexts/AuthContext';
 
 const App = () => {
   const [actProject, setActProject] = useState({value: "#0123", label: "Project"});
-  const { isAuthenticated } = useAuth();
-
+  const { isAuthenticated, user} = useAuth();
+  
   useEffect(() => {
     console.log(actProject);
   }, [actProject]) 
+
+  useEffect(() => {
+    if(isAuthenticated)
+      console.log(user.googleId);
+  }, [isAuthenticated, user]);
 
   return (
     <div className="App"> 

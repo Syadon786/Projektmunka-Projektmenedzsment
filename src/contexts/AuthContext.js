@@ -2,6 +2,7 @@ import React, {createContext, useContext, useEffect, useState} from 'react'
 import request from '../util/request';
 import User from '../model/User.model'
 
+
 const AuthContext = createContext({
   isAuthenticated: false,
   setIsAuthenticated: () => {},
@@ -20,7 +21,7 @@ const AuthProvider = ({children}) => {
         if(userData.data) {
            console.log(userData.data);   
             setUser(new User(
-                  userData.data.googleId, 
+                  userData.data._id, 
                   userData.data.name, 
                   userData.data.photo,
                   userData.data.email));    

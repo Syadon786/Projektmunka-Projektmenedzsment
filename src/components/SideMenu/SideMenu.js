@@ -66,14 +66,11 @@ const SideMenu = () => {
         <div className="divider"/>
         <nav className="main-menu">
             <ul>
+                <MenuItem path="/new" label="New Project" iconName="plus-circle" menuStatus={active} />
                 <MenuItem path="/home" label="Dashboard" iconName="speedometer2" menuStatus={active} />
                 <MenuItem label="Content" iconName="newspaper" menuStatus={active}>
                     <MenuItem path="/tree" submenu label="Tree demo" iconName="bar-chart-steps" menuStatus={active}/>
-                    <MenuItem submenu menuStatus={active}
-                    onClick={() => alert("Just a dummy")}
-                    />
                 </MenuItem>
-                <MenuItem path="/notfound" label="Not found test" iconName="bug" menuStatus={active} />
                 <MenuItem path="/logout"  label="Logout" iconName="door-open" menuStatus={active}/>
             </ul>
         </nav>

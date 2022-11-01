@@ -11,21 +11,9 @@ import { useAuth } from '../../contexts/AuthContext';
 const SideMenu = () => {
     const [active, setActive] = useState(false);
     const { user } = useAuth();
-   // const [dummyUser, setDummyUser] = useState({});
-
-
-    
-    const dummySelectorData = [{value: "#0123", label: "Project"},
-        {value: "#3210", label: "Dummy project"}
-    ]
-
-    
+  
     useEffect(() => {
-        // setDummyUser({
-        //     picture: faker.image.avatar(),
-        //     name: faker.name.fullName(),
-        //     email: faker.internet.email()
-        // });
+
         document.onresize = () => {
             let vh = window.innerHeight * 0.01;
             document.documentElement.style.setProperty('--vh', `${vh}px`);
@@ -60,8 +48,7 @@ const SideMenu = () => {
             </div>
         </div>
 
-        <Select values={dummySelectorData} 
-        selected={dummySelectorData[0]}/>
+        <Select/>
 
         <div className="divider"/>
         <nav className="main-menu">

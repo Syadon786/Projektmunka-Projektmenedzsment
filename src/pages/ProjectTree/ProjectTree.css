@@ -11,3 +11,14 @@
     cursor: default;
     transform: scale(3);
 }
+
+.add-btn {
+    position: absolute;
+    right: -35px;
+    height: 35px;
+    width: 35px;
+    font-size: 1.3rem;
+    padding: 0;
+    border: none;
+    background-color: transparent;
+}

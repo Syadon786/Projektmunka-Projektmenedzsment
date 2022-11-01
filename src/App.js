@@ -5,27 +5,31 @@ import HomePage from './pages/HomePage/HomePage';
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
 import ProjectTree from './pages/ProjectTree/ProjectTree';
 import LoginPage from './pages/LoginPage/LoginPage';
+import NewProjectPage from './pages/NewProjectPage/NewProjectPage';
+import LogoutPage from './pages/LogoutPage/LogoutPage';
 
 import "./App.css";
 import SideMenu from './components/SideMenu/SideMenu';
+import Loader from './components/Loader/Loader';
 
 import { ProjectContext } from './contexts/ProjectContext';
-import LogoutPage from './pages/LogoutPage/LogoutPage';
 
 import { useAuth } from './contexts/AuthContext';
 
 const App = () => {
   const [actProject, setActProject] = useState({value: "#0123", label: "Project"});
-  const { isAuthenticated, user} = useAuth();
+  const { isAuthenticated, isLoading, user} = useAuth();
   
   useEffect(() => {
     console.log(actProject);
   }, [actProject]) 
-
+ 
   useEffect(() => {
     if(isAuthenticated)
       console.log(user.googleId);
   }, [isAuthenticated, user]);
+
+  if(isLoading) return <Loader display={true}/>
 
   return (
     <div className="App"> 
@@ -37,22 +41,21 @@ const App = () => {
         </ProjectContext.Provider> : null}
       </div>
       <div className="content">
-        {isAuthenticated ? 
-             <Routes>
-               <Route path="/home" element={<HomePage actProject={actProject}/>} />        
-               <Route path="/logout" element={<LogoutPage />} />
-               <Route path="/tree" element={<ProjectTree actProject={actProject}/>} />
-               <Route path="/notfound" element={<NotFoundPage />} />
-               <Route path="/" element={<Navigate to="/home" replace />} />
-               <Route path="*" element={<Navigate to="/notfound" replace />} />  
-               <Route path="/login" element={<Navigate to="/home" replace />} />
-         </Routes> : 
-         <Routes>
-             <Route path="/login" element={<LoginPage />} />    
-             <Route path="*" element={<Navigate to="/login" replace />} />
-         </Routes>
+         { isAuthenticated ? 
+          <Routes>
+            <Route path="/home" element={<HomePage actProject={actProject}/>} />        
+            <Route path="/new" element={<NewProjectPage/>} />        
+            <Route path="/logout" element={<LogoutPage />} />
+            <Route path="/tree" element={<ProjectTree actProject={actProject}/>} />
+            <Route path="/notfound" element={<NotFoundPage />} />
+            <Route path="/" element={<Navigate to="/home" replace />} />
+            <Route path="*" element={<Navigate to="/notfound" replace />} />          
+          </Routes> : 
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />    
+            <Route path="*" element={<Navigate to="/login" replace />} />
+          </Routes>
         }
-      
       </div>
     </Router>
   </div>

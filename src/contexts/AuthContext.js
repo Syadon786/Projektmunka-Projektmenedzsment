@@ -13,9 +13,11 @@ export const useAuth = () => useContext(AuthContext);
 
 const AuthProvider = ({children}) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState(null); 
 
   useEffect(() => {
+    setIsLoading(true);
     const fetchUserData = async () => {
         const userData = await request.get("/getuser");
         if(userData.data) {
@@ -26,13 +28,15 @@ const AuthProvider = ({children}) => {
                   userData.data.photo,
                   userData.data.email));    
             setIsAuthenticated(true);
-        }
-    }
+          }
+          setIsLoading(false);
+        }   
     fetchUserData();
+
   }, []);
 
   return (
-    <AuthContext.Provider value={{isAuthenticated, setIsAuthenticated, user}}>
+    <AuthContext.Provider value={{isAuthenticated, setIsAuthenticated, isLoading,  user}}>
         {children}
     </AuthContext.Provider>
   )

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import Page from '../../components/Page/Page'
 
-import  SortableTree, { toggleExpandedForAll } from 'react-sortable-tree';
+import  SortableTree from 'react-sortable-tree';
 import 'react-sortable-tree/style.css';
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
@@ -12,28 +12,27 @@ import hash from 'object-hash'
 
 import './ProjectTree.css';
 import '../../styles/ProjectTree.css';
+import { useProject } from '../../contexts/ProjectContext';
 
-const ProjectTree = ({actProject}) => {
-  const [treeData, setTreeData] = useState([
-    { title: actProject.label, root: true,  children: [
-      { title: 'Frontend' , children: [{title : "UI", expanded: false}], expanded: false},
-      { title: 'Backend' , children: [{title : "Authentication", expanded: false,}], expanded: false}
-    ], expanded: false}
-  ]);
+// [
+//   { title: actProject.label, root: true,  children: [
+//     { title: 'Frontend' , children: [{title : "UI", expanded: false}], expanded: false},
+//     { title: 'Backend' , children: [{title : "Authentication", expanded: false,}], expanded: false}
+//   ], expanded: false}
+// ]
 
-  const [oldTreeData, setOldTreeData] = useState([
-    { title: actProject.label, root: true,  children: [
-      { title: 'Frontend' , children: [{title : "UI", expanded: false}], expanded: false},
-      { title: 'Backend' , children: [{title : "Authentication", expanded: false,}], expanded: false}
-    ], expanded: false}
-  ]);
+const ProjectTree = () => {
+  const {actProject, projectTreeData} = useProject();
+  const [treeData, setTreeData] = useState([{}]);
+
+  const [oldTreeData, setOldTreeData] = useState([{}]);
 
   const [oldStateHash, setOldStateHash] = useState("");
   const [newStateHash, setNewStateHash] = useState("");
 
   useEffect(() => {
     setNewStateHash(hash(treeData[0]));
-    console.dir(treeData[0])
+    //console.dir(treeData[0])
   }, [treeData]);
 
   useEffect(() => {
@@ -41,20 +40,9 @@ const ProjectTree = ({actProject}) => {
   }, [oldTreeData])
 
   useEffect(() => {
-    setTreeData([
-      { title: actProject.label, root: true,  children: [
-        { title: 'Frontend' , children: [{title : "UI", expanded: false}], expanded: false},
-        { title: 'Backend' , children: [{title : "Authentication", expanded: false,}], expanded: false}
-      ], expanded: false}
-    ]);
-
-    setOldTreeData([
-      { title: actProject.label, root: true,  children: [
-        { title: 'Frontend' , children: [{title : "UI", expanded: false}], expanded: false},
-        { title: 'Backend' , children: [{title : "Authentication", expanded: false,}], expanded: false}
-      ], expanded: false}
-    ]);
-  }, [actProject]);
+      setTreeData(projectTreeData);
+      setOldTreeData(projectTreeData);
+  }, [actProject, projectTreeData])
 
   return (
     <Page title={actProject.label} noCard>

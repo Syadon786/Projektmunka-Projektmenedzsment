@@ -1,8 +1,11 @@
 import React from 'react'
 
 import Page from '../../components/Page/Page'
+import { useProject } from '../../contexts/ProjectContext'
 
-const HomePage = ({actProject}) => {
+const HomePage = () => {
+  const {actProject} = useProject();
+
   return (
     <Page title="Home" noCard>
         <div className='d-flex justify-content-center'>

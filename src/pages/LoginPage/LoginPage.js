@@ -18,7 +18,8 @@ const LoginPage = () => {
                 <div className="card">
                     <div className="card-header">Log in or Sign up</div>
                     <div className="card-body">
-                    <div className="mb-2 text-center">Already a member? Log in with Google otherwise Sign up and create an account.</div>
+                    <div className="mb-2 text-center">Already a member?</div>
+                    <div className="mb-2 text-center">Log in with Google otherwise Sign up and create an account.</div>
                     <div className="d-grid gap-2">
                         <Button onClick={login}>
                             <div className={classes.loginBtn}>

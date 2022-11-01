@@ -13,7 +13,7 @@ const MenuItem = ({iconName="bucket", path, label="Dummy option", submenu, menuS
             <div className={`${type}-icon`}>
                 <i className={`bi bi-${iconName}`}></i>
             </div>
-            <span className={`menu-text ${active}`}>{menuStatus ? label : null}</span>
+            <span className={`${type}-text ${active}`}>{menuStatus ? label : null}</span>
         </Link>
         {children ? collapsed ? null : <ul>{children}</ul>: null}
         

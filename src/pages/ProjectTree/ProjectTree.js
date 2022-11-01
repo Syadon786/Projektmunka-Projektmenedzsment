@@ -61,8 +61,8 @@ const ProjectTree = ({actProject}) => {
           {(oldStateHash !== newStateHash) ? 
           <>
           {/* <Button onClick={() => {setTreeData(toggleExpandedForAll({treeData: treeData, expanded: false}))}}>Collapse all</Button> */}
-          <Button onClick={() => setTreeData(oldTreeData)}>Cancel changes</Button>
-          <Button className="ms-2">Save changes</Button>
+          <Button>Save changes</Button>
+          <Button className="ms-2" color="secondary" onClick={() => setTreeData(oldTreeData)}>Cancel changes</Button>
           </>
            : null}
         <SortableTree

@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import { useProject } from '../../contexts/ProjectContext';
 import request from '../../util/request';
 import Button from '../Button/Button'
 
@@ -8,6 +9,7 @@ const NewProjectForm = () => {
   const [projectName, setProjectName] = useState("");
   const { user } = useAuth();
   const navigate = useNavigate();
+  const {setCreated} = useProject();
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -19,7 +21,10 @@ const NewProjectForm = () => {
             users: [user.googleId]    
         });
         console.log(res);
-        if(res.data === "Success") navigate("/home");
+        if(res.data === "Success") {
+          setCreated((prev) => !prev)
+          navigate("/home")
+      };
     }   
     sendNewProjectData();
   }

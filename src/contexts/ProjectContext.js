@@ -16,7 +16,7 @@ export const useProject = () => useContext(ProjectContext);
 
 const ProjectProvider = ({children}) => {
   const [projects, setProjects] = useState([]);
-  const [actProject, setActProject] = useState([{label: "", value: ""}]);
+  const [actProject, setActProject] = useState([]);
   const [projectTreeData, setProjectTreeData] = useState([{}]); 
   const [created, setCreated] = useState(false);
   const { user , isAuthenticated} = useAuth();
@@ -25,7 +25,8 @@ const ProjectProvider = ({children}) => {
 
   const fetchProjectData = useCallback(async () => {
     const project = await request.get(`/project/${id}`);
-    if(project.data) {
+    console.log(project);
+    if(project.data.length > 0) {
           setProjects(project.data);
           setActProject({label: project.data[0].name, value: project.data[0]._id})
           setProjectTreeData(project.data[0].treeData);

@@ -1,0 +1,36 @@
+@media screen and (max-width: 1360px) {
+    .App .content {
+        padding-left: 110px;
+        box-sizing: border-box;
+    }
+}
+
+html {
+    height: 100%;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+body {
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+.content {
+    height: 100vh;
+}
+
+::-webkit-scrollbar-track {
+    background: #333;
+  }
+::-webkit-scrollbar {
+width: 7px;
+}
+::-webkit-scrollbar-thumb {
+background: #666;
+}
+::-webkit-scrollbar-thumb:hover {
+background: #888;
+}

@@ -7,7 +7,7 @@ import googleLogo from  "../../assets/icons8-google-48.png";
 
 const LoginPage = () => {
   const login = () => {
-    window.open('http://localhost:3001/auth/google', "_self");
+    window.open(`${process.env.REACT_APP_BACKEND}/auth/google`, "_self");
   } 
 
   return (

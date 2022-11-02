@@ -8,7 +8,7 @@ const Loader = ({color = "primary", display}) => {
 
     return (
       display ? 
-      <div className="d-flex justify-content-center">
+      <div className="d-flex justify-content-center align-items-center" style={{height: "100%"}}>
           <div className={`spinner-border ${LoaderConfig[color]}`} role="status">
               <span className="visually-hidden">Loading...</span>
           </div>

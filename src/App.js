@@ -17,13 +17,18 @@ import { useAuth } from './contexts/AuthContext';
 
 const App = () => {
   const { isAuthenticated, isAuthLoading, user} = useAuth();
-  const {isProjectLoading, actProject} = useProject();
+  const {actProject} = useProject();
   useEffect(() => {
     if(isAuthenticated)
       console.log(user.googleId);
   }, [isAuthenticated, user]);
 
-  if(isAuthLoading || isProjectLoading) return <Loader display={true}/>
+  useEffect(() => {
+    console.log(actProject);
+  }, [actProject])
+
+  if(isAuthLoading) return <Loader display={true}/>
+  else if(isAuthenticated && actProject === false) return <Loader display={true}/>
    console.log();
   return (
     <div className="App"> 
@@ -32,9 +37,9 @@ const App = () => {
         {isAuthenticated ?  <SideMenu/> : null}
       </div>
       <div className="content">
-         { isAuthenticated ? 
+         { isAuthenticated ?
           <Routes>
-              {Object.keys(actProject).length === 0 ? 
+              {(Object.keys(actProject).length === 0) ? 
               <>
                 <Route path="/new" element={<NewProjectPage/>} />   
                 <Route path="/home" element={<HomePage/>} />          
@@ -51,7 +56,7 @@ const App = () => {
                 <Route path="/tree" element={<ProjectTree/>} />
                 <Route path="/notfound" element={<NotFoundPage />} />
                 <Route path="/" element={<Navigate to="/home" replace />} />
-                <Route path="*" element={<Navigate to="/notfound" replace />} />      
+                <Route path="*" element={<Navigate to="/notfound" replace />} />   
               </>      
               }                                               
           </Routes>

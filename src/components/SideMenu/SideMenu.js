@@ -7,10 +7,12 @@ import logo from "../../assets/react-2.svg";
 import MenuItem from '../MenuItem/MenuItem';
 import Select from '../Select/Select';
 import { useAuth } from '../../contexts/AuthContext';
+import { useProject } from '../../contexts/ProjectContext';
 
 const SideMenu = () => {
     const [active, setActive] = useState(false);
     const { user } = useAuth();
+    const {actProject} = useProject();
   
     useEffect(() => {
 
@@ -48,17 +50,27 @@ const SideMenu = () => {
             </div>
         </div>
 
-        <Select/>
+        {Object.keys(actProject).length === 0 ? null : <Select/>}
 
         <div className="divider"/>
         <nav className="main-menu">
             <ul>
+            {Object.keys(actProject).length === 0 ? 
+            <>
+                <MenuItem path="/new" label="New Project" iconName="plus-circle" menuStatus={active} />
+                <MenuItem path="/home" label="Dashboard" iconName="speedometer2" menuStatus={active} />
+                <MenuItem path="/logout" label="Logout" iconName="door-open" menuStatus={active}/>
+            </> : 
+            <>
                 <MenuItem path="/new" label="New Project" iconName="plus-circle" menuStatus={active} />
                 <MenuItem path="/home" label="Dashboard" iconName="speedometer2" menuStatus={active} />
                 <MenuItem label="Content" iconName="newspaper" menuStatus={active}>
                     <MenuItem path="/tree" submenu label="Tree demo" iconName="bar-chart-steps" menuStatus={active}/>
                 </MenuItem>
-                <MenuItem path="/logout"  label="Logout" iconName="door-open" menuStatus={active}/>
+                <MenuItem path="/logout" label="Logout" iconName="door-open" menuStatus={active}/>
+            </>
+            }
+             
             </ul>
         </nav>
        

@@ -15,7 +15,7 @@ const ProjectContext = createContext({
 export const useProject = () => useContext(ProjectContext);
 
 const ProjectProvider = ({children}) => {
-  const [projects, setProjects] = useState([]);
+  const [projects, setProjects] = useState([]); //csak value (id) és label (name)
   const [actProject, setActProject] = useState([]);
   const [projectTreeData, setProjectTreeData] = useState([{}]); 
   const [created, setCreated] = useState(false);
@@ -23,27 +23,30 @@ const ProjectProvider = ({children}) => {
 
   const id = user ? user.googleId : "";
 
-  const fetchProjectData = useCallback(async () => {
-    const project = await request.get(`/project/${id}`);
-    console.log(project);
-    if(project.data.length > 0) {
-          setProjects(project.data);
-          setActProject({label: project.data[0].name, value: project.data[0]._id})
-          setProjectTreeData(project.data[0].treeData);
+  const fetchProjectsData = useCallback(async () => {
+    const projectsData = await request.get(`/${id}/project/`);
+    console.log(projectsData);
+    if(projectsData.data.length > 0) {
+          setProjects(projectsData.data);
+          setActProject({label: projectsData.data[0].name, value: projectsData.data[0]._id})
       }
     }, [id]);  
 
   useEffect(() => {
    if(isAuthenticated) {
-       fetchProjectData();
+       fetchProjectsData();
    }     
-  }, [created, isAuthenticated, id, fetchProjectData]);
+  }, [created, isAuthenticated, id, fetchProjectsData]);
+
 
   useEffect(()=> {
-    const act = projects.find(project => project._id === actProject.value);
-    if(act) {
-        setProjectTreeData(act.treeData);
+    const fetchProjectData = async () => {
+      const projectData = await request.get(`/project/${actProject.value}`)
+      if(projectData.data) {
+        setProjectTreeData(projectData.data.treeData);
+      }
     }
+    fetchProjectData();
   }, [actProject, projects])
 
   return (

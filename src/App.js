@@ -23,13 +23,8 @@ const App = () => {
       console.log(user.googleId);
   }, [isAuthenticated, user]);
 
-  useEffect(() => {
-    console.log(actProject);
-  }, [actProject])
-
   if(isAuthLoading) return <Loader display={true}/>
   else if(isAuthenticated && actProject === false) return <Loader display={true}/>
-   console.log();
   return (
     <div className="App"> 
     <Router>

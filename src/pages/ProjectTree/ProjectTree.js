@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import Page from '../../components/Page/Page'
 
-import  SortableTree, {addNodeUnderParent} from 'react-sortable-tree';
+import  SortableTree from 'react-sortable-tree';
 import 'react-sortable-tree/style.css';
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
@@ -12,8 +12,9 @@ import hash from 'object-hash'
 
 import './ProjectTree.css';
 import '../../styles/ProjectTree.css';
-import { useProject } from '../../contexts/ProjectContext';
+import { useProject} from '../../contexts/ProjectContext';
 import TaskModal from '../../components/TaskModal/TaskModal';
+import request from '../../util/request';
 
 // [
 //   { title: actProject.label, root: true,  children: [
@@ -25,14 +26,21 @@ import TaskModal from '../../components/TaskModal/TaskModal';
 const ProjectTree = () => {
   const {actProject, projectTreeData} = useProject();
   const [treeData, setTreeData] = useState([{}]);
-  const getNodeKey = ({ treeIndex }) => treeIndex;
 
   const [oldTreeData, setOldTreeData] = useState([{}]);
 
   const [oldStateHash, setOldStateHash] = useState("");
   const [newStateHash, setNewStateHash] = useState("");
+  const [actRowInfo, setActRowInfo] = useState(0);
 
-  
+  const handleUpdate = async () => {
+      const res = await request.patch(`/project/${actProject.value}`, {
+        treeData: treeData
+      });
+      if(res.data === "Success") {
+        setOldTreeData(treeData);
+      }
+  }
 
   useEffect(() => {
     setNewStateHash(hash(treeData[0]));
@@ -53,7 +61,7 @@ const ProjectTree = () => {
           {(oldStateHash !== newStateHash) ? 
           <>
           {/* <Button onClick={() => {setTreeData(toggleExpandedForAll({treeData: treeData, expanded: false}))}}>Collapse all</Button> */}
-          <Button>Save changes</Button>
+          <Button onClick={handleUpdate}>Save changes</Button>
           <Button className="ms-2" color="secondary" onClick={() => setTreeData(oldTreeData)}>Cancel changes</Button>
           </>
            : null}
@@ -73,18 +81,9 @@ const ProjectTree = () => {
           generateNodeProps={(rowInfo) => ({
             buttons: [
               <button className="bar-btn"><CircularProgressbar className='bar' value={0.66} maxValue={1} text="66%"/></button>,
-              <button className="add-btn"
-                  onClick={() => {
-                    
-                    setTreeData(() => {
-                      return addNodeUnderParent({
-                        treeData: treeData,
-                        newNode: {  title: `XD`},
-                        parentKey: rowInfo.path[rowInfo.path.length - 1],
-                        expandParent: true,
-                        getNodeKey,                     
-                      }).treeData
-                    })
+              <button className="add-btn" data-bs-toggle="modal" data-bs-target="#taskModal"
+                  onClick={() => {         
+                    setActRowInfo(rowInfo)
                   }}
                 >
                  <i className="bi bi-plus-circle"></i>
@@ -95,10 +94,7 @@ const ProjectTree = () => {
 
         <div>Eredeti állapot: {oldStateHash}</div>
         <div>Új állapot: {newStateHash}</div>
-        <Button data-bs-toggle="modal" data-bs-target="#exampleModal">
-          Open modal test
-        </Button>
-        <TaskModal title="Create a New Task"/>
+        <TaskModal title="Create a New Task" treeData={treeData} rowInfo={actRowInfo} setTreeData={setTreeData}/>
     </Page>
   )
 

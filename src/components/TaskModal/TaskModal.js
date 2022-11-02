@@ -1,10 +1,24 @@
-import React from 'react'
+import React, {useState} from 'react'
 import Button from '../Button/Button'
+import  {addNodeUnderParent} from 'react-sortable-tree';
 
-const Modal = ({title}) => {
+const TaskModal = ({title, treeData, rowInfo, setTreeData}) => {
+  const [taskName, setTaskName] = useState("");
+  const getNodeKey = ({ treeIndex }) => treeIndex;
+
+  const addChildNode = () => {
+    return addNodeUnderParent({
+      treeData: treeData,
+      newNode: {  title: taskName},
+      parentKey: rowInfo.path[rowInfo.path.length - 1],
+      expandParent: true,
+      getNodeKey,                     
+    }).treeData
+  }
+
   return (
     <>
-    <div className="modal fade" tabIndex="-1" id="exampleModal">
+    <div className="modal fade" tabIndex="-1" id="taskModal">
     <div className="modal-dialog">
         <div className="modal-content">
         <div className="modal-header">
@@ -16,12 +30,12 @@ const Modal = ({title}) => {
                 <div className="form-group">
                 <label >Task name</label>
                 <input type="text" 
-                    //value="xd"
-                // onChange={(event) => setProjectName(event.target.value)} 
+                    value={taskName}
+                   onChange={(event) => setTaskName(event.target.value)} 
                     className="form-control" required/>
             </div>
             <div className="form-group mt-2">
-                <label>Task description</label>
+                <label>Task description (in progress)</label>
                 <textarea className="form-control"></textarea>
             </div>
             <div className="form-group mt-2">
@@ -32,7 +46,11 @@ const Modal = ({title}) => {
             </div>
             <div className="modal-footer">
                 <Button onClick={(event) => event.preventDefault()} color="secondary" data-bs-dismiss="modal">Close</Button>
-                <Button onClick={(e) => {e.preventDefault()}}>Save changes</Button>
+                <Button data-bs-dismiss="modal" onClick={(event) => {
+                    event.preventDefault()
+                    setTreeData(addChildNode());
+                    setTaskName("");
+                }}>Save</Button>
             </div>
         </form>
         </div>
@@ -42,4 +60,4 @@ const Modal = ({title}) => {
   )
 }
 
-export default Modal
+export default TaskModal

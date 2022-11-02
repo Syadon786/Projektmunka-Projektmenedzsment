@@ -13,11 +13,11 @@ export const useAuth = () => useContext(AuthContext);
 
 const AuthProvider = ({children}) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
   const [user, setUser] = useState(null); 
 
   useEffect(() => {
-    setIsLoading(true);
+    setIsAuthLoading(true);
     const fetchUserData = async () => {
         const userData = await request.get("/getuser");
         if(userData.data) {
@@ -29,14 +29,14 @@ const AuthProvider = ({children}) => {
                   userData.data.email));    
             setIsAuthenticated(true);
           }
-          setIsLoading(false);
+          setIsAuthLoading(false);
         }   
     fetchUserData();
 
   }, []);
 
   return (
-    <AuthContext.Provider value={{isAuthenticated, setIsAuthenticated, isLoading,  user}}>
+    <AuthContext.Provider value={{isAuthenticated, setIsAuthenticated, isAuthLoading,  user}}>
         {children}
     </AuthContext.Provider>
   )

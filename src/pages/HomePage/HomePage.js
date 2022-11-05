@@ -7,7 +7,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import Page from '../../components/Page/Page'
 import ProjectUsers from '../../components/ProjectUsers/ProjectUsers';
 import Button from '../../components/Button/Button';
-import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal';
+import Modal from '../../components/Modal/Modal';
 import FormModal from '../../components/FormModal/FormModal';
 import request from '../../util/request';
 
@@ -86,9 +86,9 @@ const HomePage = () => {
           </div>
 
 
-          <ConfirmationModal id="deleteProjectModal" title="Are you sure?" btnColor="danger" approveText="Delete" approveFunc={deleteProject}>
+          <Modal id="deleteProjectModal" title="Are you sure?" btnColor="danger" approveText="Delete" approveFunc={deleteProject}>
             Do you really want to delete this project?
-          </ConfirmationModal>
+          </Modal>
 
           <FormModal id="addUserModal" title="Add new members to the project" approveText="Add" approveFunc={addUsers}>
             <div className="form-group mt-2">

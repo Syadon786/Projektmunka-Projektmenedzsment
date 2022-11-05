@@ -18,7 +18,7 @@ const ProjectUser = ({id, photo, name, email, updateUsers}) => {
 
   return (
     <tr>
-        <td><img className="homepage-user-img" src={photo} alt={`${name}`}/></td>
+        <td><img className="homepage-user-img" src={photo} alt={`${name}`} referrerPolicy="no-referrer"/></td>
         <td>{email}</td>
         <td>{name}</td>
         {((user.googleId  === id) || id === actProject.owner) ? null

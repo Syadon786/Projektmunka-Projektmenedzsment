@@ -43,15 +43,15 @@ const ProjectProvider = ({children}) => {
   }, [created, isAuthenticated, id, fetchProjectsData]);
 
   useEffect(()=> {
-    console.log(actProject);
-    const fetchProjectData = async () => {
+    const fetchProjectTreeData = async () => {
       const projectData = await request.get(`/project/${actProject.value}`)
+      console.log(projectData.data);
       if(projectData.data) {
         setProjectTreeData(projectData.data.treeData);
       }
     }
     if(isAuthenticated && actProject.value) {
-      fetchProjectData();
+      fetchProjectTreeData();
     }
   }, [actProject, projects, isAuthenticated])
 

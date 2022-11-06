@@ -9,7 +9,7 @@ const FormModal = ({id, title, children, btnColor="primary", approveFunc, approv
                     <div className="modal-content">
                     <div className="modal-header">
                         <h5 className="modal-title">{title}</h5>
-                        <Button color="light" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></Button>
+                        <Button color="light" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={(e) => e.preventDefault()}></Button>
                     </div>
                     <div className="modal-body">      
                     {children}

@@ -30,7 +30,6 @@ const HomePage = () => {
         })
         if(res.data) {
           setUsers(res.data.map((act) => act.email.split('@')[0]));
-          console.log(res.data)
         }
     };
     fetchUsers();

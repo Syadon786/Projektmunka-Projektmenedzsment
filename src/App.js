@@ -14,6 +14,7 @@ import Loader from './components/Loader/Loader';
 
 import { useProject } from './contexts/ProjectContext';
 import { useAuth } from './contexts/AuthContext';
+import MessengerPage from './pages/MessengerPage/MessengerPage';
 
 const App = () => {
   const { isAuthenticated, isAuthLoading, user} = useAuth();
@@ -49,6 +50,7 @@ const App = () => {
                 <Route path="/new" element={<NewProjectPage/>} />        
                 <Route path="/logout" element={<LogoutPage />} />
                 <Route path="/tree" element={<ProjectTree/>} />
+                <Route path="/messenger" element={<MessengerPage/>}/>
                 <Route path="/notfound" element={<NotFoundPage />} />
                 <Route path="/" element={<Navigate to="/home" replace />} />
                 <Route path="*" element={<Navigate to="/notfound" replace />} />   

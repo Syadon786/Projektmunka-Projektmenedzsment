@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from 'react'
+import { format } from 'timeago.js';
+
 import { useAuth } from '../../contexts/AuthContext';
 import request from '../../util/request';
-import "./Message";
 
 import "./Message.css";
 
@@ -31,7 +32,7 @@ const Message = ({message, own}) => {
              </p>
         </div>
         <div className="messageBottom">
-            {message.createdAt}
+            {format(message.createdAt)}
         </div>
 
     </div>

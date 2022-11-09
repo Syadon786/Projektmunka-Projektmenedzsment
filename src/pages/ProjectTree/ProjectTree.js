@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import Page from '../../components/Page/Page'
 
-import  SortableTree from 'react-sortable-tree';
+import  SortableTree, {removeNodeAtPath} from 'react-sortable-tree';
 import 'react-sortable-tree/style.css';
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
@@ -15,13 +15,7 @@ import '../../styles/ProjectTree.css';
 import { useProject} from '../../contexts/ProjectContext';
 import TaskModal from '../../components/TaskModal/TaskModal';
 import request from '../../util/request';
-
-// [
-//   { title: actProject.label, root: true,  children: [
-//     { title: 'Frontend' , children: [{title : "UI", expanded: false}], expanded: false},
-//     { title: 'Backend' , children: [{title : "Authentication", expanded: false,}], expanded: false}
-//   ], expanded: false}
-// ]
+import TaskDetailModal from '../../components/TaskDetailModal/TaskDetailModal';
 
 const ProjectTree = () => {
   const {actProject, projectTreeData} = useProject();
@@ -31,7 +25,7 @@ const ProjectTree = () => {
 
   const [oldStateHash, setOldStateHash] = useState("");
   const [newStateHash, setNewStateHash] = useState("");
-  const [actRowInfo, setActRowInfo] = useState(0);
+  const [actRowInfo, setActRowInfo] = useState({node: {taskId: "", title: "", description: ""}});
 
   const handleUpdate = async () => {
       const res = await request.patch(`/project/${actProject.value}`, {
@@ -44,7 +38,6 @@ const ProjectTree = () => {
 
   useEffect(() => {
     setNewStateHash(hash(treeData[0]));
-    //console.dir(treeData[0])
   }, [treeData]);
 
   useEffect(() => {
@@ -80,9 +73,14 @@ const ProjectTree = () => {
           }}                
           generateNodeProps={(rowInfo) => ({
             buttons: [
-              <button className="bar-btn"><CircularProgressbar className='bar' value={0.66} maxValue={1} text="66%"/></button>,
+              <button className="bar-btn" data-bs-toggle="modal" data-bs-target="#taskDetailModal" onClick={() => {                             
+                        setActRowInfo(rowInfo)
+                        console.log(rowInfo.node);
+              }}>
+                <CircularProgressbar className='bar' value={0.66} maxValue={1} text="66%"/>
+              </button>,
               <button className="add-btn" data-bs-toggle="modal" data-bs-target="#taskModal"
-                  onClick={() => {         
+                  onClick={() => {       
                     setActRowInfo(rowInfo)
                   }}
                 >
@@ -94,7 +92,10 @@ const ProjectTree = () => {
 
         <div>Eredeti állapot: {oldStateHash}</div>
         <div>Új állapot: {newStateHash}</div>
-        <TaskModal title="Create a New Task" treeData={treeData} rowInfo={actRowInfo} setTreeData={setTreeData}/>
+        <TaskModal title="Create a New Task" treeData={treeData} rowInfo={actRowInfo} setTreeData={setTreeData} />
+    
+        <TaskDetailModal path={actRowInfo.path} title={actRowInfo.node.title} desc={actRowInfo.node.description} taskId={actRowInfo.node.taskId} 
+        projectId={actProject.value} setTreeData={setTreeData} treeData={treeData} removeNode={removeNodeAtPath}></TaskDetailModal>
     </Page>
   )
 

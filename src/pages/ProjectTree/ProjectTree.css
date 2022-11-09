@@ -8,7 +8,6 @@
 }
 
 .bar-btn:hover {
-    cursor: default;
     transform: scale(3);
 }
 

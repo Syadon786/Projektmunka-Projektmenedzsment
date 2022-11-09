@@ -7,6 +7,7 @@ const ProjectContext = createContext({
   setProjects: () => {},
   actProject: false,
   setActProject: () => {},
+  fetchProjectsData: () => {},
   projectTreeData: [{}],
   created: false,
   setCreated: () => {},
@@ -28,7 +29,7 @@ const ProjectProvider = ({children}) => {
     console.log(projectsData);
     if(projectsData.data.length > 0) {
           setProjects(projectsData.data);
-          setActProject({label: projectsData.data[0].name, value: projectsData.data[0]._id})
+          setActProject({label: projectsData.data[0].name, value: projectsData.data[0]._id, owner: projectsData.data[0].owner})
         }
       else {
         setActProject({});
@@ -42,19 +43,20 @@ const ProjectProvider = ({children}) => {
   }, [created, isAuthenticated, id, fetchProjectsData]);
 
   useEffect(()=> {
-    const fetchProjectData = async () => {
+    const fetchProjectTreeData = async () => {
       const projectData = await request.get(`/project/${actProject.value}`)
+      console.log(projectData.data);
       if(projectData.data) {
         setProjectTreeData(projectData.data.treeData);
       }
     }
     if(isAuthenticated && actProject.value) {
-      fetchProjectData();
+      fetchProjectTreeData();
     }
   }, [actProject, projects, isAuthenticated])
 
   return (
-    <ProjectContext.Provider value={{projects, actProject, setActProject, projectTreeData, setProjectTreeData, setCreated}}>
+    <ProjectContext.Provider value={{projects, actProject, setActProject, projectTreeData, fetchProjectsData, setProjectTreeData, setCreated}}>
         {children}
     </ProjectContext.Provider>
   )

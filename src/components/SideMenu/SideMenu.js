@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react'
 //import { faker } from "@faker-js/faker";
 
 import "./SideMenu.css";
-import logo from "../../assets/react-2.svg";
+import logo from "../../assets/icons8-stacked-organizational-chart-highlighted-parent-node-100.png";
 import MenuItem from '../MenuItem/MenuItem';
 import Select from '../Select/Select';
 import { useAuth } from '../../contexts/AuthContext';
@@ -65,7 +65,8 @@ const SideMenu = () => {
                 <MenuItem path="/new" label="New Project" iconName="plus-circle" menuStatus={active} />
                 <MenuItem path="/home" label="Dashboard" iconName="speedometer2" menuStatus={active} />
                 <MenuItem label="Content" iconName="newspaper" menuStatus={active}>
-                    <MenuItem path="/tree" submenu label="Tree demo" iconName="bar-chart-steps" menuStatus={active}/>
+                    <MenuItem path="/tree" submenu label="Project Tree" iconName="diagram-3" menuStatus={active}/>
+                    <MenuItem path="/gantt" submenu label="Gantt chart" iconName="bar-chart-steps" menuStatus={active}/>
                 </MenuItem>
                 <MenuItem path="/messenger" label="Conversations" iconName="chat" menuStatus={active} />
                 <MenuItem path="/logout" label="Logout" iconName="door-open" menuStatus={active}/>

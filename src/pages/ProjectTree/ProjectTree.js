@@ -16,25 +16,60 @@ import { useProject} from '../../contexts/ProjectContext';
 import TaskModal from '../../components/TaskModal/TaskModal';
 import request from '../../util/request';
 import TaskDetailModal from '../../components/TaskDetailModal/TaskDetailModal';
+import axios from 'axios';
 
 const ProjectTree = () => {
-  const {actProject, projectTreeData} = useProject();
+  const {actProject, projectTreeData, setProjectTreeData} = useProject();
   const [treeData, setTreeData] = useState([{}]);
-
   const [oldTreeData, setOldTreeData] = useState([{}]);
 
   const [oldStateHash, setOldStateHash] = useState("");
   const [newStateHash, setNewStateHash] = useState("");
+
+  const [newTasks, setNewTasks] = useState([]);
+  const [tasksToDelete, setTasksToDelete] = useState([]);
   const [actRowInfo, setActRowInfo] = useState({node: {taskId: "", title: "", description: ""}});
 
   const handleUpdate = async () => {
-      const res = await request.patch(`/project/${actProject.value}`, {
-        treeData: treeData
-      });
-      if(res.data === "Success") {
-        setOldTreeData(treeData);
+      const toDelete = [];
+      if(tasksToDelete.length > 0) {
+        const getTaskIds = (tasks) => {
+          tasks.forEach(task => {
+            toDelete.push(request.delete(`/task/${task.taskId}`));
+            if(!task.hasOwnProperty("children")) return;
+            getTaskIds(task.children);
+          })
+        };
+        getTaskIds(tasksToDelete); 
       }
+
+      axios.all([
+        request.patch(`/project/${actProject.value}`, {
+          treeData: treeData
+        }),
+        ...newTasks.map(task => {
+          return request.post("/task", {
+            _id: task._id,
+            title: task.title,
+            projectId: actProject.value,
+            startDate: task.startDate,
+            endDate: task.endDate,
+            description: task.description,
+            members: task.members
+          });
+        }),
+        ...toDelete
+      ]).then(axios.spread((projectRes, tasksRes) => {
+
+        //setOldTreeData(treeData);
+        setProjectTreeData(treeData);
+        setNewTasks([]);
+        setTasksToDelete([]);
+      }));
   }
+  useEffect(() => {
+    console.log("New Task", newTasks);
+  }, [newTasks]);
 
   useEffect(() => {
     setNewStateHash(hash(treeData[0]));
@@ -55,7 +90,11 @@ const ProjectTree = () => {
           <>
           {/* <Button onClick={() => {setTreeData(toggleExpandedForAll({treeData: treeData, expanded: false}))}}>Collapse all</Button> */}
           <Button onClick={handleUpdate}>Save changes</Button>
-          <Button className="ms-2" color="secondary" onClick={() => setTreeData(oldTreeData)}>Cancel changes</Button>
+          <Button className="ms-2" color="secondary" onClick={() => {
+            setTreeData(oldTreeData);
+            setTasksToDelete([]);
+            setNewTasks([]);
+            }}>Cancel changes</Button>
           </>
            : null}
         <SortableTree
@@ -90,12 +129,11 @@ const ProjectTree = () => {
           })}
         />
 
-        <div>Eredeti állapot: {oldStateHash}</div>
-        <div>Új állapot: {newStateHash}</div>
-        <TaskModal title="Create a New Task" treeData={treeData} rowInfo={actRowInfo} setTreeData={setTreeData} />
+        <TaskModal title="Create a New Task"  projectId={actProject.value} treeData={treeData} rowInfo={actRowInfo} setTreeData={setTreeData} setNewTask={setNewTasks}/>
     
         <TaskDetailModal path={actRowInfo.path} title={actRowInfo.node.title} desc={actRowInfo.node.description} taskId={actRowInfo.node.taskId} 
-        projectId={actProject.value} setTreeData={setTreeData} treeData={treeData} removeNode={removeNodeAtPath}></TaskDetailModal>
+        endDate={actRowInfo.node.endDate}
+        setTreeData={setTreeData} treeData={treeData} removeNode={removeNodeAtPath} setTasksToDelete={setTasksToDelete}></TaskDetailModal>
     </Page>
   )
 

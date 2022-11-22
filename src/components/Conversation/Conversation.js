@@ -6,9 +6,10 @@ import request from '../../util/request';
 
 import "./Conversation.css"
 
-const Conversation = ({conversation, currentUser, actProject}) => {
+const Conversation = ({conversation, currentUser, selected, actProject}) => {
 
   const [otherUsers, setOtherUsers] = useState([]);
+  const [label, setLabel] = useState("");
 
   useEffect(() => {
        const fetchUsers = async() => {
@@ -24,9 +25,22 @@ const Conversation = ({conversation, currentUser, actProject}) => {
       fetchUsers();
   }, [conversation, currentUser.googleId])
 
+  useEffect(() => {
+    if(conversation.isTaskChat) {
+        const fetchTaskName = async () => {
+          const res = await request.get(`/task/name/${conversation._id}`)
+          if(res.data) {
+            console.log("Task name", res.data);
+            setLabel(res.data.title);
+          }
+        }
+        fetchTaskName();
+    } 
+  }, [conversation])
+
 
   return (
-    <div className='conversation'>
+    <div className={`conversation ${selected ? "selected" : ""}`}>
         {otherUsers ?        
         <>
           <AvatarGroup appearance="stack" maxCount={4} data={
@@ -45,7 +59,7 @@ const Conversation = ({conversation, currentUser, actProject}) => {
             }))
           ]
           } /> 
-          <span className='conversationName'>{actProject.label}</span>   
+          <span className='conversationName'>{conversation.isTaskChat ? label : actProject.label}</span>   
         </> :
         null
         }

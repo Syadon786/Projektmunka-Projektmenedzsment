@@ -9,8 +9,7 @@ import "./Conversation.css"
 const Conversation = ({conversation, currentUser, selected, actProject}) => {
 
   const [otherUsers, setOtherUsers] = useState([]);
-  const [label, setLabel] = useState("");
-
+ 
   useEffect(() => {
        const fetchUsers = async() => {
           const res = await request.post("/conversations/users", {
@@ -24,20 +23,6 @@ const Conversation = ({conversation, currentUser, selected, actProject}) => {
       const others = conversation.members.filter(m => m !== currentUser.googleId);
       fetchUsers();
   }, [conversation, currentUser.googleId])
-
-  useEffect(() => {
-    if(conversation.isTaskChat) {
-        const fetchTaskName = async () => {
-          const res = await request.get(`/task/name/${conversation._id}`)
-          if(res.data) {
-            console.log("Task name", res.data);
-            setLabel(res.data.title);
-          }
-        }
-        fetchTaskName();
-    } 
-  }, [conversation])
-
 
   return (
     <div className={`conversation ${selected ? "selected" : ""}`}>
@@ -59,7 +44,7 @@ const Conversation = ({conversation, currentUser, selected, actProject}) => {
             }))
           ]
           } /> 
-          <span className='conversationName'>{conversation.isTaskChat ? label : actProject.label}</span>   
+          <span className='conversationName'>{conversation.title}</span>   
         </> :
         null
         }

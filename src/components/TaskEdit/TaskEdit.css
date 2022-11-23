@@ -1,0 +1,13 @@
+.atlaskit-portal-container {
+    position: fixed;
+    z-index: 10000;
+}
+
+.dynamic-form {
+    max-height: 150px;
+    overflow: auto;
+}
+
+.btn-close {
+    margin-left: 20px !important;
+}

@@ -6,10 +6,10 @@ import request from '../../util/request';
 
 import "./Conversation.css"
 
-const Conversation = ({conversation, currentUser, actProject}) => {
+const Conversation = ({conversation, currentUser, selected, actProject}) => {
 
   const [otherUsers, setOtherUsers] = useState([]);
-
+ 
   useEffect(() => {
        const fetchUsers = async() => {
           const res = await request.post("/conversations/users", {
@@ -24,9 +24,8 @@ const Conversation = ({conversation, currentUser, actProject}) => {
       fetchUsers();
   }, [conversation, currentUser.googleId])
 
-
   return (
-    <div className='conversation'>
+    <div className={`conversation ${selected ? "selected" : ""}`}>
         {otherUsers ?        
         <>
           <AvatarGroup appearance="stack" maxCount={4} data={
@@ -45,7 +44,7 @@ const Conversation = ({conversation, currentUser, actProject}) => {
             }))
           ]
           } /> 
-          <span className='conversationName'>{actProject.label}</span>   
+          <span className='conversationName'>{conversation.title}</span>   
         </> :
         null
         }

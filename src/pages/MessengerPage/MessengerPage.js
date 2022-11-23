@@ -25,18 +25,17 @@ const MessengerPage = () => {
    const socket = useRef();
 
    useEffect(() => {
-      const fetchMessages = async () => {
+      const fetchConversations = async () => {
         const res = await request.get(`/conversations/${actProject.value}`);
         if(res.data) {
-          console.log(res.data);
-          setConversations(res.data);
+          setConversations(res.data.filter(conversation => conversation.members.includes(user.googleId)));
           if(prevChat) {
             socket.current?.emit("leaveRoom", {userId: user.googleId, conversationId: prevChat._id})
           }
           setCurrentChat(res.data[0]);
         }
       }
-      fetchMessages();
+      fetchConversations();
    }, [actProject])
 
    useEffect(() => {
@@ -109,17 +108,20 @@ const MessengerPage = () => {
   }
 
   return (
-    <Page title=""className="messenger" noCard>
+    <Page title=""className="messenger">
         <div className="chatMenu">
             <div className="chatMenuWrapper">
-              <input className='chatMenuInput' placholder="Search for chat"/>
+              <p></p>
               {conversations ? 
               <> {conversations.map(c => 
                 <div  key={c?._id}  onClick={() => {
                   setCurrentChat(c);
+                  if(prevChat) {
+                    socket.current?.emit("leaveRoom", {userId: user.googleId, conversationId: prevChat._id})
+                  }
                 }
                }>
-                  <Conversation conversation={c} actProject={actProject} currentUser={user}/>
+                  <Conversation conversation={c} selected={currentChat._id === c._id} actProject={actProject} currentUser={user}/>
                 </div>
               )}
               </> 
@@ -156,11 +158,6 @@ const MessengerPage = () => {
                 :
                 <span className="noConversationText">Open a conversation</span>
               }
-          </div>
-        </div>
-        <div className="chatOnline">
-          <div className="chatOnlineWrapper">
-                online
           </div>
         </div>
     </Page>

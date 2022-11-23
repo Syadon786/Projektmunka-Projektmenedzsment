@@ -15,3 +15,7 @@
     font-size: 1.2rem;
     margin-left: 10px;
 }
+
+.selected {
+    background-color: rgb(231, 230, 230);
+}

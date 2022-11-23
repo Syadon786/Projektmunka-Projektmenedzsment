@@ -7,6 +7,7 @@ import ProjectTree from './pages/ProjectTree/ProjectTree';
 import LoginPage from './pages/LoginPage/LoginPage';
 import NewProjectPage from './pages/NewProjectPage/NewProjectPage';
 import LogoutPage from './pages/LogoutPage/LogoutPage';
+import GanttPage from './pages/GanttPage/GanttPage';
 
 import "./App.css";
 import SideMenu from './components/SideMenu/SideMenu';
@@ -50,6 +51,7 @@ const App = () => {
                 <Route path="/new" element={<NewProjectPage/>} />        
                 <Route path="/logout" element={<LogoutPage />} />
                 <Route path="/tree" element={<ProjectTree/>} />
+                <Route path="/gantt" element={<GanttPage/>} />
                 <Route path="/messenger" element={<MessengerPage/>}/>
                 <Route path="/notfound" element={<NotFoundPage />} />
                 <Route path="/" element={<Navigate to="/home" replace />} />

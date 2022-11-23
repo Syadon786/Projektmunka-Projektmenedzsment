@@ -28,13 +28,36 @@ const ProjectTree = () => {
 
   const [newTasks, setNewTasks] = useState([]);
   const [tasksToDelete, setTasksToDelete] = useState([]);
+  const [tasksToUpdate, setTasksToUpdate] = useState([]);
   const [actRowInfo, setActRowInfo] = useState({node: {taskId: "", title: "", description: ""}});
+  const [users, setUsers] = useState([]);
+  const [refreshModal, setRefreshModal] = useState(false);
+
+  useEffect(() => {
+    const fetchProjectUsers = async () => {
+        const res = await request.get(`/project/${actProject.value}/users`)
+        if(res.data) {
+          setUsers(res.data.map((act) => act.email.split('@')[0]));
+        }
+    };
+    fetchProjectUsers();
+  }, [actProject.value]);  
 
   const handleUpdate = async () => {
       const toDelete = [];
       if(tasksToDelete.length > 0) {
         const getTaskIds = (tasks) => {
-          tasks.forEach(task => {
+          tasks.forEach((task, index) => {
+            if(task._id === newTasks[index]?._id) {
+                let data = [...newTasks];
+                data.splice(index, 1);
+                setNewTasks(data);
+            }
+            else if(task._id === tasksToUpdate[index]?._id) {
+                let data = [...tasksToUpdate];
+                data.splice(index, 1);
+                setTasksToUpdate(data);
+            }
             toDelete.push(request.delete(`/task/${task.taskId}`));
             if(!task.hasOwnProperty("children")) return;
             getTaskIds(task.children);
@@ -58,18 +81,26 @@ const ProjectTree = () => {
             members: task.members
           });
         }),
-        ...toDelete
+        ...toDelete,
+        ...tasksToUpdate.map(task => {
+          return request.patch(`/task/${task.taskId}`, {
+            title: task.title,
+            projectId: actProject.value,
+            endDate: task.endDate,
+            description: task.description,
+            members: task.members,
+            subtasks: task.subtasks.filter(subtask => subtask !== "")
+          })
+        })
       ]).then(axios.spread((projectRes, tasksRes) => {
 
-        //setOldTreeData(treeData);
         setProjectTreeData(treeData);
         setNewTasks([]);
         setTasksToDelete([]);
+        setTasksToUpdate([]);
+        setRefreshModal(prev => !prev);
       }));
   }
-  useEffect(() => {
-    console.log("New Task", newTasks);
-  }, [newTasks]);
 
   useEffect(() => {
     setNewStateHash(hash(treeData[0]));
@@ -84,16 +115,25 @@ const ProjectTree = () => {
       setOldTreeData(projectTreeData);
   }, [actProject, projectTreeData])
 
+  useEffect(() => {
+    if(newStateHash === oldStateHash) {
+      setNewTasks([]);
+      setTasksToDelete([]);
+      setTasksToUpdate([]);
+    }
+   
+  }, [newStateHash, oldStateHash])
+
   return (
     <Page title={actProject.label} noCard>
           {(oldStateHash !== newStateHash) ? 
           <>
-          {/* <Button onClick={() => {setTreeData(toggleExpandedForAll({treeData: treeData, expanded: false}))}}>Collapse all</Button> */}
           <Button onClick={handleUpdate}>Save changes</Button>
           <Button className="ms-2" color="secondary" onClick={() => {
             setTreeData(oldTreeData);
             setTasksToDelete([]);
             setNewTasks([]);
+            setTasksToUpdate([]);
             }}>Cancel changes</Button>
           </>
            : null}
@@ -129,11 +169,11 @@ const ProjectTree = () => {
           })}
         />
 
-        <TaskModal title="Create a New Task"  projectId={actProject.value} treeData={treeData} rowInfo={actRowInfo} setTreeData={setTreeData} setNewTask={setNewTasks}/>
+        <TaskModal title="Create a New Task"  users={users} treeData={treeData} rowInfo={actRowInfo} setTreeData={setTreeData} setNewTask={setNewTasks}/>
     
-        <TaskDetailModal path={actRowInfo.path} title={actRowInfo.node.title} desc={actRowInfo.node.description} taskId={actRowInfo.node.taskId} 
-        endDate={actRowInfo.node.endDate}
-        setTreeData={setTreeData} treeData={treeData} removeNode={removeNodeAtPath} setTasksToDelete={setTasksToDelete}></TaskDetailModal>
+        <TaskDetailModal path={actRowInfo.path} title={actRowInfo.node.title} subtasks={actRowInfo.node.subtasks} users={users} desc={actRowInfo.node.description} taskId={actRowInfo.node.taskId} 
+        endDate={actRowInfo.node.endDate} refresh={refreshModal} 
+        setTreeData={setTreeData} treeData={treeData} removeNode={removeNodeAtPath} setTasksToDelete={setTasksToDelete} setTasksToUpdate={setTasksToUpdate}></TaskDetailModal>
     </Page>
   )
 

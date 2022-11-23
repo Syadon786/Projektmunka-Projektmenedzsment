@@ -1,5 +1,4 @@
-import React, {useState, useEffect} from 'react'
-import request from '../../util/request';
+import React, {useState} from 'react'
 import  {addNodeUnderParent} from 'react-sortable-tree';
 import FormModal from '../FormModal/FormModal';
 import TextInput from 'react-autocomplete-input';
@@ -10,24 +9,12 @@ import { v4 as uuidv4 } from 'uuid'
 
 import "react-datepicker/dist/react-datepicker.css";
 
-const TaskModal = ({title, treeData, rowInfo, setTreeData, setNewTask, projectId}) => {
+const TaskModal = ({title, treeData, users, rowInfo, setTreeData, setNewTask}) => {
   const [taskName, setTaskName] = useState("");
   const [description, setDescription] = useState("");
   const [endDate, setEndDate] = useState(new Date(new Date().getTime() + 24 * 60 * 60 * 1000));
   const [selectedUsers, setSelectedUsers] = useState("");
-  const [users, setUsers] = useState([]);
-
-  useEffect(() => {
-    const fetchProjectUsers = async () => {
-        const res = await request.get(`/project/${projectId}/users`)
-        if(res.data) {
-          setUsers(res.data.map((act) => act.email.split('@')[0]));
-          console.log(res.data)
-        }
-    };
-    fetchProjectUsers();
-  }, [projectId]);  
-
+  
   const getNodeKey = ({ treeIndex }) => treeIndex;
 
   const addChildNode = () => {
@@ -40,8 +27,10 @@ const TaskModal = ({title, treeData, rowInfo, setTreeData, setNewTask, projectId
     return addNodeUnderParent({
       treeData: treeData,
       newNode: {taskId: taskId, title: taskName, description: description, 
-        endDate: endDate.toLocaleDateString('en-EN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })},
-        members: [...(selectedUsers.slice(1).trim().split("@").map((act) => act.trim()+"@gmail.com"))],
+        endDate: endDate.toLocaleDateString('en-EN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
+        members: [...(selectedUsers.slice(1).trim().split("@").map((act) => act.trim()+"@gmail.com"))], 
+        subtasks: []
+      },
       parentKey: rowInfo.path[rowInfo.path.length - 1],
       expandParent: true,
       getNodeKey,                     
@@ -51,10 +40,12 @@ const TaskModal = ({title, treeData, rowInfo, setTreeData, setNewTask, projectId
   return (
     <FormModal id="taskModal" title={title} approveText="Save" 
     approveFunc={() => {  
-                    setTreeData(addChildNode());
-                    setTaskName("");
-                    setDescription("");
-                    setSelectedUsers("");
+              if(taskName) {
+                setTreeData(addChildNode());
+              }
+              setTaskName("");
+              setDescription("");
+              setSelectedUsers("");
       }}>
       <div className="form-group">
           <label >Task name</label>

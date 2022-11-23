@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import Button from '../Button/Button'
 
-import { getNodeAtPath, changeNodeAtPath } from '../../util/tree-data-utils';
+import { getNodeAtPath, changeNodeAtPath } from 'react-sortable-tree';
 import TextInput from 'react-autocomplete-input';
 import DatePicker from "react-datepicker";
 import AvatarGroup from '@atlaskit/avatar-group';

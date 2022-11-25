@@ -145,7 +145,20 @@ const ProjectTree = () => {
                                     return true;
           
           }}                
-          generateNodeProps={(rowInfo) => ({
+          generateNodeProps={(rowInfo) => { 
+            if(rowInfo.node.root) {
+              return ({buttons: [
+                    <button className="add-btn" data-bs-toggle="modal" data-bs-target="#taskModal" 
+                    style={{top: "50%", transform: 'translateY(-50%)' }}
+                    onClick={() => {       
+                      setActRowInfo(rowInfo)
+                    }}
+                  >
+                  <i className="bi bi-plus-circle"></i>
+                  </button>
+              ]})
+            }           
+            return ({
             buttons: [
               <button className="bar-btn" data-bs-toggle="modal" data-bs-target="#taskDetailModal" onClick={() => {                             
                         setActRowInfo(rowInfo)
@@ -161,7 +174,7 @@ const ProjectTree = () => {
                  <i className="bi bi-plus-circle"></i>
                 </button>
             ]
-          })}
+          })}}
         />
 
         {(oldStateHash !== newStateHash) ? 

@@ -131,18 +131,7 @@ const ProjectTree = () => {
   }, [newStateHash, oldStateHash])
 
   return (
-    <Page title={actProject.label} noCard>
-          {(oldStateHash !== newStateHash) ? 
-          <>
-          <Button onClick={handleUpdate}>Save changes</Button>
-          <Button className="ms-2" color="secondary" onClick={() => {
-            setTreeData(oldTreeData);
-            setTasksToDelete([]);
-            setNewTasks([]);
-            setTasksToUpdate([]);
-            }}>Cancel changes</Button>
-          </>
-           : null}
+    <Page title={actProject.label} className="page-container">
         <SortableTree
           treeData={treeData}
           onChange={((prevData) => {setTreeData(prevData)})}
@@ -174,6 +163,20 @@ const ProjectTree = () => {
             ]
           })}
         />
+
+        {(oldStateHash !== newStateHash) ? 
+          <>
+          <div className="mt-4">
+            <Button onClick={handleUpdate}>Save changes</Button>
+            <Button className="ms-2" color="secondary" onClick={() => {
+              setTreeData(oldTreeData);
+              setTasksToDelete([]);
+              setNewTasks([]);
+              setTasksToUpdate([]);
+              }}>Cancel changes</Button>
+          </div>
+          </>
+           : null}
 
         <TaskModal title="Create a New Task"  users={users} treeData={treeData} rowInfo={actRowInfo} setTreeData={setTreeData} setNewTask={setNewTasks}/>
     

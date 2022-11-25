@@ -1,8 +1,11 @@
 import React from 'react'
 import Button from '../Button/Button';
 import AvatarGroup from '@atlaskit/avatar-group';
+import ImageGallery from 'react-image-gallery';
 
-const TaskDetail = ({members, subtasks, title, desc, endDate, setEditMode}) => {
+import "./TaskDetail.css";
+
+const TaskDetail = ({members, images, subtasks, title, desc, endDate, setEditMode}) => {
   return (
     <>
     <div className="modal-header">
@@ -23,7 +26,14 @@ const TaskDetail = ({members, subtasks, title, desc, endDate, setEditMode}) => {
           </li>
         )}) : <>This task does not have subtasks.</>}
         </ul>
-      </div>    
+      </div>  
+      {images.length > 0 ? 
+        <div>
+          <ImageGallery items={images} showBullets={true} lazyLoad={true}/>
+        </div> :
+      <></>
+      }
+     
     </div>              
     <div className="modal-footer">
         <div className="me-auto">

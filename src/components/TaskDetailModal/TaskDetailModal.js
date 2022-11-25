@@ -10,11 +10,37 @@ const TaskDetailModal = ({taskId, refresh, users, path, title, desc, subtasks, e
 
     const [editMode, setEditMode] = useState(false);
     const [members, setMembers] = useState([]);
+    const [images, setImages] = useState({});
+    const [imageUrls, setImageUrls] = useState([]);
+    const [refreshGallery, setRefreshGallery] = useState(false);
     const taskDetailModal = useRef();
 
    useEffect(() => {
       console.log(editMode);
    }, [editMode]);  
+
+   useEffect(() => {
+       const fetchImageUrls = async () => {
+          const res = await request.get(`/task/${taskId}/images`);
+          if(res.data) {
+            setImageUrls([...res.data.images.map(imgUrl => ({
+              original:  imgUrl,
+              thumbnail: `https://res.cloudinary.com/duvvax1vs/image/upload/c_thumb,w_200,g_face/${imgUrl.substring(49)}`
+            }))])
+          }
+       } 
+       if(taskId) {
+         fetchImageUrls();
+       }
+   }, [refreshGallery, taskId])
+
+   useEffect(() => {
+    console.log(imageUrls);
+   }, [imageUrls])
+
+   useEffect(() => {
+    console.log("images", images);
+   }, [images])
 
    useEffect(() => {
        if(taskId) {
@@ -49,10 +75,12 @@ const TaskDetailModal = ({taskId, refresh, users, path, title, desc, subtasks, e
             <div className="modal-dialog">
                 <div className="modal-content">
                     {editMode ? 
-                    <TaskEdit taskId={taskId} users={users} members={members} prevSubtasks={subtasks} title={title} endDate={endDate} desc={desc} setTasksToDelete={setTasksToDelete} 
-                    treeData={treeData} path={path} setTreeData={setTreeData} removeNode={removeNode} setTasksToUpdate={setTasksToUpdate}/>
+                    <TaskEdit taskId={taskId} images={images} setImages={setImages} users={users} members={members} prevSubtasks={subtasks} title={title} endDate={endDate} desc={desc} setTasksToDelete={setTasksToDelete} 
+                    treeData={treeData} path={path} setTreeData={setTreeData} removeNode={removeNode} setTasksToUpdate={setTasksToUpdate} refreshGallery={setRefreshGallery}
+                    
+                    />
                     :                      
-                    <TaskDetail title={title} subtasks={subtasks} members={members} desc={desc} endDate={endDate} setEditMode={setEditMode}/>}       
+                    <TaskDetail title={title} images={imageUrls} subtasks={subtasks} members={members} desc={desc} endDate={endDate} setEditMode={setEditMode}/>}       
                 </div>
             </div>        
     </div>

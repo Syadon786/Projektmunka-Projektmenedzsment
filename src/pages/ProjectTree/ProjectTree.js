@@ -18,6 +18,10 @@ import request from '../../util/request';
 import TaskDetailModal from '../../components/TaskDetailModal/TaskDetailModal';
 import axios from 'axios';
 
+import { ToastContainer, toast } from 'react-toastify';
+
+import 'react-toastify/dist/ReactToastify.css';
+
 const ProjectTree = () => {
   const {actProject, projectTreeData, setProjectTreeData} = useProject();
   const [treeData, setTreeData] = useState([{}]);
@@ -31,6 +35,7 @@ const ProjectTree = () => {
   const [tasksToUpdate, setTasksToUpdate] = useState([]);
   const [actRowInfo, setActRowInfo] = useState({node: {taskId: "", title: "", description: ""}});
   const [users, setUsers] = useState([]);
+  
   const [refreshModal, setRefreshModal] = useState(false);
 
   useEffect(() => {
@@ -91,9 +96,10 @@ const ProjectTree = () => {
             members: task.members,
             subtasks: task.subtasks.filter(subtask => subtask !== "")
           })
-        })
-      ]).then(axios.spread((projectRes, tasksRes) => {
-
+        }),
+      ]).then(axios.spread((...response) => {
+        console.log(response);
+        toast.success(`Project tree was successfully updated.`);
         setProjectTreeData(treeData);
         setNewTasks([]);
         setTasksToDelete([]);
@@ -174,6 +180,7 @@ const ProjectTree = () => {
         <TaskDetailModal path={actRowInfo.path} title={actRowInfo.node.title} subtasks={actRowInfo.node.subtasks} users={users} desc={actRowInfo.node.description} taskId={actRowInfo.node.taskId} 
         endDate={actRowInfo.node.endDate} refresh={refreshModal} 
         setTreeData={setTreeData} treeData={treeData} removeNode={removeNodeAtPath} setTasksToDelete={setTasksToDelete} setTasksToUpdate={setTasksToUpdate}></TaskDetailModal>
+        <ToastContainer/>
     </Page>
   )
 

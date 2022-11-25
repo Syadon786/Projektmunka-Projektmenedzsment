@@ -16,7 +16,7 @@ const Button = ({children, color = "primary", className, ...props}) => {
   }
 
   return (
-    <button className={`btn ${BtnConfig[color]} ${className}`}
+    <button className={`btn ${BtnConfig[color]} ${className ? className : ""}`}
     {...props}  
     >
     {children}

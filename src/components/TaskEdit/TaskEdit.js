@@ -45,7 +45,7 @@ const TaskEdit = ({taskId, members, images, setImages, users, prevSubtasks, titl
              })})
           ]).then(axios.spread((...response) => {
             console.log("res", response);
-            toast.success(`${response.length} images was successfully uploaded.`);
+            toast.success(`${response.length} image(s) was successfully uploaded.`);
             refreshGallery((prev) => !prev);
             const data = {...images};
             data[`${taskId}`] = [];

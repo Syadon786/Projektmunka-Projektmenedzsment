@@ -1,5 +1,7 @@
 import React from 'react'
 
+import "./Page.css";
+
 const Page = ({title, children, noCard, className}) => {
   return (
     <div className={`container pt-3`}>

@@ -1,11 +1,33 @@
-import React from 'react'
+import React, {useRef} from 'react'
 import Button from '../Button/Button';
 import AvatarGroup from '@atlaskit/avatar-group';
 import ImageGallery from 'react-image-gallery';
+import { ToastContainer, toast } from 'react-toastify';
+
+import request from '../../util/request';
 
 import "./TaskDetail.css";
+import 'react-toastify/dist/ReactToastify.css';
 
-const TaskDetail = ({members, images, subtasks, title, desc, endDate, setEditMode}) => {
+const TaskDetail = ({taskId, members, images, subtasks, title, desc, endDate, setEditMode, setImages, refreshGallery}) => {
+  const imageGallery = useRef(); 
+
+  const handleImageDelete = async (url) => {
+    const assetName = url.substring(61).split('.')[0];
+    const res = await request.delete(`/task/${taskId}/image`, {
+      data: {
+        assetName: assetName,
+        url: url
+      }
+    });
+    if(res.data === "Success") {
+      toast.success(`Image was successfully deleted.`);
+    } else {
+      toast.error(`Image deletion failed.`);
+    }
+    refreshGallery(prev => !prev);
+  }
+
   return (
     <>
     <div className="modal-header">
@@ -28,13 +50,19 @@ const TaskDetail = ({members, images, subtasks, title, desc, endDate, setEditMod
         </ul>
       </div>  
       {images.length > 0 ? 
+      <details open={true}>
+        <summary><h6 style={{display: "inline"}}>Gallery:</h6></summary>
         <div>
-          <ImageGallery items={images} showBullets={true} lazyLoad={true}/>
-        </div> :
+          <ImageGallery ref={imageGallery} items={images} showBullets={true} lazyLoad={true}/>
+          <Button className="btn-sm" onClick={() => {
+             handleImageDelete(images[imageGallery.current.state.currentIndex].original);
+          }}>Delete Current Image</Button>
+        </div>
+        </details> :
       <></>
       }
      
-    </div>              
+    </div>             
     <div className="modal-footer">
         <div className="me-auto">
         
@@ -55,6 +83,7 @@ const TaskDetail = ({members, images, subtasks, title, desc, endDate, setEditMod
         <Button color="secondary" data-bs-dismiss="modal">Close</Button>
         {/* <Button data-bs-dismiss="modal" onClick={() => {}}>Save (in progress)</Button> */}
     </div>
+    <ToastContainer limit={1}/>
     </>
   )
 }

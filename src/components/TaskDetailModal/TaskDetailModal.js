@@ -15,6 +15,19 @@ const TaskDetailModal = ({taskId, refresh, users, path, title, desc, subtasks, e
     const [refreshGallery, setRefreshGallery] = useState(false);
     const taskDetailModal = useRef();
 
+
+    // const newPath = [...path];
+    // newPath.splice(-1, 1);
+    // // newPath is the path of the parent, starting from the current node.
+
+    // const parentNode = getNodeAtPath({
+    //     treeData,
+    //     path: newPath,
+    //     getNodeKey,
+    // }).node;
+
+    // console.log(parentNode)
+
    useEffect(() => {
       console.log(editMode);
    }, [editMode]);  
@@ -75,12 +88,15 @@ const TaskDetailModal = ({taskId, refresh, users, path, title, desc, subtasks, e
             <div className="modal-dialog">
                 <div className="modal-content">
                     {editMode ? 
-                    <TaskEdit taskId={taskId} images={images} setImages={setImages} users={users} members={members} prevSubtasks={subtasks} title={title} endDate={endDate} desc={desc} setTasksToDelete={setTasksToDelete} 
-                    treeData={treeData} path={path} setTreeData={setTreeData} removeNode={removeNode} setTasksToUpdate={setTasksToUpdate} refreshGallery={setRefreshGallery}
-                    
+                    <TaskEdit taskId={taskId} images={images} setImages={setImages} users={users} members={members} 
+                    prevSubtasks={subtasks} title={title} endDate={endDate} desc={desc} setTasksToDelete={setTasksToDelete} 
+                    treeData={treeData} path={path} setTreeData={setTreeData} removeNode={removeNode} setTasksToUpdate={setTasksToUpdate} 
+                    refreshGallery={setRefreshGallery}
+                    setEditMode={setEditMode}
                     />
                     :                      
-                    <TaskDetail title={title} images={imageUrls} subtasks={subtasks} members={members} desc={desc} endDate={endDate} setEditMode={setEditMode}/>}       
+                    <TaskDetail taskId={taskId} title={title} images={imageUrls} subtasks={subtasks} members={members} 
+                    desc={desc} endDate={endDate} setImages={setImageUrls} refreshGallery={setRefreshGallery} setEditMode={setEditMode}/>}       
                 </div>
             </div>        
     </div>

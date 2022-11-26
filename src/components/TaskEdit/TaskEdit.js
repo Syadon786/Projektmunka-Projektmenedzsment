@@ -15,7 +15,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import "./TaskEdit.css";
 
-const TaskEdit = ({taskId, members, images, setImages, users, prevSubtasks, title, desc, endDate, setTasksToDelete, 
+const TaskEdit = ({taskId, members, images, setImages, users, prevSubtasks, title, desc, endDate, setTasksToDelete, setEditMode,
     treeData, path, setTreeData, removeNode, setTasksToUpdate, refreshGallery}) => {
     const getNodeKey = ({ treeIndex }) => treeIndex;
     const [taskName, setTaskName] = useState(title);
@@ -85,7 +85,7 @@ const TaskEdit = ({taskId, members, images, setImages, users, prevSubtasks, titl
     return (
         <>
         <div className="modal-header">
-            <h5 className="modal-title me-auto">Edit: {title}</h5>
+            <h5 className="modal-title me-auto">Edit: {title}</h5>  
             <div className="modal-title ms-auto">
             {members ? 
              <AvatarGroup appearance="stack" maxCount={2} data={
@@ -101,6 +101,7 @@ const TaskEdit = ({taskId, members, images, setImages, users, prevSubtasks, titl
                 /> 
             : <></>}
             </div>
+            <Button color="light" className="btn-back" onClick={() => setEditMode(prev => !prev)}><i className="bi bi-backspace"></i></Button>  
             <Button color="light" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></Button>
         </div>
         <div className="modal-body">  
@@ -170,7 +171,7 @@ const TaskEdit = ({taskId, members, images, setImages, users, prevSubtasks, titl
             <Button color="secondary" data-bs-dismiss="modal">Close</Button>
             <Button data-bs-dismiss="modal" onClick={setChanges}>Set Changes</Button> 
         </div>
-        <ToastContainer />
+        <ToastContainer limit={1}/>
         </>
       )
 }

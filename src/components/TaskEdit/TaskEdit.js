@@ -14,8 +14,10 @@ import { ToastContainer, toast } from 'react-toastify';
 
 import 'react-toastify/dist/ReactToastify.css';
 import "./TaskEdit.css";
+import { useAuth } from '../../contexts/AuthContext';
+import { useProject } from '../../contexts/ProjectContext';
 
-const TaskEdit = ({taskId, members, images, setImages, users, prevSubtasks, title, desc, endDate, setTasksToDelete, setEditMode,
+const TaskEdit = ({taskId, members, permissions, images, setImages, users, prevSubtasks, title, desc, endDate, setTasksToDelete, setEditMode,
     treeData, path, setTreeData, removeNode, setTasksToUpdate, refreshGallery}) => {
     const getNodeKey = ({ treeIndex }) => treeIndex;
     const [taskName, setTaskName] = useState(title);
@@ -23,6 +25,8 @@ const TaskEdit = ({taskId, members, images, setImages, users, prevSubtasks, titl
     const [newEndDate, setNewEndDate] = useState(new Date(endDate));
     const [subtasks, setSubtasks] = useState([]);
     const [selectedUsers, setSelectedUsers] = useState("");
+    const {user} = useAuth();
+    const {actProject} = useProject();
   
     useEffect(() => {
         if(prevSubtasks) {
@@ -163,11 +167,13 @@ const TaskEdit = ({taskId, members, images, setImages, users, prevSubtasks, titl
             </div>
         </div>              
         <div className="modal-footer">
+            {permissions[`${taskId}`]?.[`${user.googleId}`]?.["delete"] 
+              || actProject.owner === user.googleId ?
             <Button color="danger" style={{position: "absolute", left: "15px"}} data-bs-dismiss="modal" onClick={() => {
                 setTasksToDelete((prev) => [...prev, getNodeAtPath({treeData: treeData, path: path, getNodeKey: getNodeKey, ignoreCollapsed: false}).node]) 
                 setTreeData(removeNode({treeData: treeData, path: path, getNodeKey: getNodeKey, ignoreCollapsed: false}));
             }                     
-            }>Delete</Button> 
+            }>Delete</Button> : <></>}
             <Button color="secondary" data-bs-dismiss="modal">Close</Button>
             <Button data-bs-dismiss="modal" onClick={setChanges}>Set Changes</Button> 
         </div>

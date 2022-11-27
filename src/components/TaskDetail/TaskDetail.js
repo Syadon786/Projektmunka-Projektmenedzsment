@@ -8,9 +8,13 @@ import request from '../../util/request';
 
 import "./TaskDetail.css";
 import 'react-toastify/dist/ReactToastify.css';
+import { useAuth } from '../../contexts/AuthContext';
+import { useProject } from '../../contexts/ProjectContext';
 
-const TaskDetail = ({taskId, members, images, subtasks, title, desc, endDate, setEditMode, setImages, refreshGallery}) => {
+const TaskDetail = ({taskId, members, images, permissions, subtasks, title, desc, endDate, setEditMode, setImages, refreshGallery}) => {
   const imageGallery = useRef(); 
+  const {user} = useAuth();
+  const {actProject} = useProject();
 
   const handleImageDelete = async (url) => {
     const assetName = url.substring(61).split('.')[0];
@@ -33,7 +37,12 @@ const TaskDetail = ({taskId, members, images, subtasks, title, desc, endDate, se
     <div className="modal-header">
         <h5 className="modal-title">{title}</h5>
         <p className="modal-title ms-auto">{endDate}</p>
-        <Button className="ms-auto" onClick={() => setEditMode(prev => !prev)}>Edit</Button>
+        {permissions[`${taskId}`]?.[`${user.googleId}`]?.["edit"] 
+              || actProject.owner === user.googleId ?
+              <Button className="ms-auto" onClick={() => setEditMode(prev => !prev)}>Edit</Button> 
+              : 
+              <></>}
+ 
         <Button color="light" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></Button>
     </div>
     <div className="modal-body">  
@@ -83,7 +92,6 @@ const TaskDetail = ({taskId, members, images, subtasks, title, desc, endDate, se
         <Button color="secondary" data-bs-dismiss="modal">Close</Button>
         {/* <Button data-bs-dismiss="modal" onClick={() => {}}>Save (in progress)</Button> */}
     </div>
-    <ToastContainer limit={1}/>
     </>
   )
 }

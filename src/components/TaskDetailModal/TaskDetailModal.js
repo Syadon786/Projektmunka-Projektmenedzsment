@@ -6,7 +6,7 @@ import TaskEdit from '../TaskEdit/TaskEdit';
 
 import request from '../../util/request';
 
-const TaskDetailModal = ({taskId, refresh, users, path, title, desc, subtasks, endDate, treeData, setTreeData, removeNode, setTasksToDelete, setTasksToUpdate}) => {
+const TaskDetailModal = ({taskId, refresh, permissions, users, path, title, desc, subtasks, endDate, treeData, setTreeData, removeNode, setTasksToDelete, setTasksToUpdate, newTasks}) => {
 
     const [editMode, setEditMode] = useState(false);
     const [members, setMembers] = useState([]);
@@ -30,22 +30,30 @@ const TaskDetailModal = ({taskId, refresh, users, path, title, desc, subtasks, e
 
    useEffect(() => {
       console.log(editMode);
+      console.log(permissions);
    }, [editMode]);  
 
    useEffect(() => {
        const fetchImageUrls = async () => {
           const res = await request.get(`/task/${taskId}/images`);
           if(res.data) {
+            console.log(res.data);
             setImageUrls([...res.data.images.map(imgUrl => ({
               original:  imgUrl,
               thumbnail: `https://res.cloudinary.com/duvvax1vs/image/upload/c_thumb,w_200,g_face/${imgUrl.substring(49)}`
             }))])
           }
        } 
+
        if(taskId) {
-         fetchImageUrls();
+        if(newTasks.filter(task => task._id === taskId).length > 0) {
+          setImageUrls([]);
+        }
+        else {
+          fetchImageUrls();
+        }
        }
-   }, [refreshGallery, taskId])
+   }, [refreshGallery, taskId, newTasks])
 
    useEffect(() => {
     console.log(imageUrls);
@@ -87,16 +95,18 @@ const TaskDetailModal = ({taskId, refresh, users, path, title, desc, subtasks, e
     <div className="modal fade" tabIndex="-1" ref={taskDetailModal} id="taskDetailModal">
             <div className="modal-dialog">
                 <div className="modal-content">
-                    {editMode ? 
-                    <TaskEdit taskId={taskId} images={images} setImages={setImages} users={users} members={members} 
+                    {
+                    editMode ? 
+                    <TaskEdit taskId={taskId} permissions={permissions} images={images} setImages={setImages} users={users} members={members} 
                     prevSubtasks={subtasks} title={title} endDate={endDate} desc={desc} setTasksToDelete={setTasksToDelete} 
                     treeData={treeData} path={path} setTreeData={setTreeData} removeNode={removeNode} setTasksToUpdate={setTasksToUpdate} 
                     refreshGallery={setRefreshGallery}
                     setEditMode={setEditMode}
                     />
-                    :                      
-                    <TaskDetail taskId={taskId} title={title} images={imageUrls} subtasks={subtasks} members={members} 
-                    desc={desc} endDate={endDate} setImages={setImageUrls} refreshGallery={setRefreshGallery} setEditMode={setEditMode}/>}       
+                    :                    
+                    <TaskDetail permissions={permissions} taskId={taskId} title={title} images={imageUrls} subtasks={subtasks} members={members} 
+                    desc={desc} endDate={endDate} setImages={setImageUrls} refreshGallery={setRefreshGallery} setEditMode={setEditMode}/>
+                    }       
                 </div>
             </div>        
     </div>

@@ -21,7 +21,7 @@ const ProjectUsers = ({triggerRefresh}) => {
   }, [actProject.value, fetchProjectUsers, triggerRefresh]);
 
   return (
-    <div>
+    <div className="table-responsive">
     <p className='fs-4'>Project users: </p>
     <table className="table">
         <tbody>

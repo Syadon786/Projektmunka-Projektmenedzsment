@@ -29,7 +29,8 @@ const TaskModal = ({title, treeData, users, rowInfo, setTreeData, setNewTask}) =
       newNode: {taskId: taskId, title: taskName, description: description, 
         endDate: endDate.toLocaleDateString('en-EN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
         members: [...(selectedUsers.slice(1).trim().split("@").map((act) => act.trim()+"@gmail.com"))], 
-        subtasks: []
+        subtasks: [],
+        children: []
       },
       parentKey: rowInfo.path[rowInfo.path.length - 1],
       expandParent: true,

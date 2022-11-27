@@ -1,35 +1,83 @@
 import React, {useState, useEffect} from 'react'
 import Button from '../Button/Button'
 
-import { getNodeAtPath, changeNodeAtPath } from '../../util/tree-data-utils';
+import { getNodeAtPath, changeNodeAtPath } from 'react-sortable-tree';
 import TextInput from 'react-autocomplete-input';
 import DatePicker from "react-datepicker";
 import AvatarGroup from '@atlaskit/avatar-group';
+import ImageUploader from "react-images-upload";
+import request from '../../util/request';
 
-import "./TaskEdit.css";
 import DynamicInput from '../DynamicInput/DynamicInput';
+import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
 
+import 'react-toastify/dist/ReactToastify.css';
+import "./TaskEdit.css";
+import { useAuth } from '../../contexts/AuthContext';
+import { useProject } from '../../contexts/ProjectContext';
 
-const TaskEdit = ({taskId, members, users, prevSubtasks, title, desc, endDate, setTasksToDelete, treeData, path, setTreeData, removeNode, setTasksToUpdate}) => {
+const TaskEdit = ({taskId, members, permissions, images, setImages, users, prevSubtasks, title, desc, endDate, setTasksToDelete, setEditMode,
+    treeData, path, setTreeData, removeNode, setTasksToUpdate, refreshGallery}) => {
     const getNodeKey = ({ treeIndex }) => treeIndex;
     const [taskName, setTaskName] = useState(title);
     const [description, setDescription] = useState(desc);
     const [newEndDate, setNewEndDate] = useState(new Date(endDate));
     const [subtasks, setSubtasks] = useState([]);
     const [selectedUsers, setSelectedUsers] = useState("");
-
+    const {user} = useAuth();
+    const {actProject} = useProject();
+  
     useEffect(() => {
         if(prevSubtasks) {
             setSubtasks([...prevSubtasks]);
         }
     }, [prevSubtasks])
 
+    const toBase64 = file => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+    });
+
+    const handleUpload = async () => {
+        axios.all([ 
+             ...images[`${taskId}`].map(image => {return request.post(`/task/image/upload`, {
+                image: image,
+                taskId: taskId
+             })})
+          ]).then(axios.spread((...response) => {
+            console.log("res", response);
+            toast.success(`${response.length} image(s) was successfully uploaded.`);
+            refreshGallery((prev) => !prev);
+            const data = {...images};
+            data[`${taskId}`] = [];
+            setImages(data);
+          }));
+
+    }
+
+    const onDrop = async picture => {
+        console.log(picture);
+        const data = {...images};
+        if( data[`${taskId}`]) {
+            if( data[`${taskId}`].length < 10) {
+                data[`${taskId}`] = [...data[`${taskId}`], await toBase64(picture[picture.length - 1])];
+            }
+        }
+        else {
+            data[`${taskId}`] = [await toBase64(picture[picture.length - 1])];
+        }
+        setImages(data);
+      };
+
     const setChanges = () => {
-        console.log(taskId);
       const updatedTask = {taskId: taskId, title: taskName, description: description, 
         endDate: newEndDate.toLocaleDateString('en-EN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
         members: [...members.map(member => member.email), ...(selectedUsers.slice(1).trim().split("@").map((act) => act.trim()+"@gmail.com"))], 
-        subtasks: [...subtasks]};
+        subtasks: [...subtasks],
+        };
 
       setTasksToUpdate((prev) => [...prev, updatedTask]);
       setTreeData(changeNodeAtPath({treeData: treeData,
@@ -41,7 +89,7 @@ const TaskEdit = ({taskId, members, users, prevSubtasks, title, desc, endDate, s
     return (
         <>
         <div className="modal-header">
-            <h5 className="modal-title me-auto">Edit: {title}</h5>
+            <h5 className="modal-title me-auto">Edit: {title}</h5>  
             <div className="modal-title ms-auto">
             {members ? 
              <AvatarGroup appearance="stack" maxCount={2} data={
@@ -57,6 +105,7 @@ const TaskEdit = ({taskId, members, users, prevSubtasks, title, desc, endDate, s
                 /> 
             : <></>}
             </div>
+            <Button color="light" className="btn-back" onClick={() => setEditMode(prev => !prev)}><i className="bi bi-backspace"></i></Button>  
             <Button color="light" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></Button>
         </div>
         <div className="modal-body">  
@@ -92,17 +141,43 @@ const TaskEdit = ({taskId, members, users, prevSubtasks, title, desc, endDate, s
                     }}
                 value={selectedUsers}/>  
                 </div>
+                <div className="form-group mt-2">
+                <ImageUploader               
+                    withIcon={true}
+                    onChange={onDrop}
+                    imgExtension={[".jpg", ".gif", ".png", ".gif"]}
+                    maxFileSize={5242880}
+                 />
+                 {images[`${taskId}`]?.length > 0 ?   
+                    <div>
+                        <span>
+                            Added {images[`${taskId}`].length} image.
+                        </span>
+                        <Button className="btn-sm ms-2"  onClick={() => {
+                           handleUpload()
+                        }}>Upload</Button>   
+                        <Button color="secondary" className="btn-sm ms-2"  onClick={() => {
+                            const data = {...images};
+                            data[`${taskId}`] = [];
+                            setImages(data);
+                            }}>Clear</Button>                      
+                    </div>
+                : <></>} 
+                </div>
             </div>
         </div>              
         <div className="modal-footer">
+            {permissions[`${taskId}`]?.[`${user.googleId}`]?.["delete"] 
+              || actProject.owner === user.googleId ?
             <Button color="danger" style={{position: "absolute", left: "15px"}} data-bs-dismiss="modal" onClick={() => {
                 setTasksToDelete((prev) => [...prev, getNodeAtPath({treeData: treeData, path: path, getNodeKey: getNodeKey, ignoreCollapsed: false}).node]) 
                 setTreeData(removeNode({treeData: treeData, path: path, getNodeKey: getNodeKey, ignoreCollapsed: false}));
             }                     
-            }>Delete</Button> 
+            }>Delete</Button> : <></>}
             <Button color="secondary" data-bs-dismiss="modal">Close</Button>
             <Button data-bs-dismiss="modal" onClick={setChanges}>Set Changes</Button> 
         </div>
+        <ToastContainer limit={1}/>
         </>
       )
 }

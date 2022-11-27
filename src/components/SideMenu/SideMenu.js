@@ -66,7 +66,7 @@ const SideMenu = () => {
                 <MenuItem path="/home" label="Dashboard" iconName="speedometer2" menuStatus={active} />
                 <MenuItem label="Content" iconName="newspaper" menuStatus={active}>
                     <MenuItem path="/tree" submenu label="Project Tree" iconName="diagram-3" menuStatus={active}/>
-                    <MenuItem path="/gantt" submenu label="Gantt chart" iconName="bar-chart-steps" menuStatus={active}/>
+                    <MenuItem path="/gantt" submenu label="Gantt Chart" iconName="bar-chart-steps" menuStatus={active}/>
                 </MenuItem>
                 <MenuItem path="/messenger" label="Conversations" iconName="chat" menuStatus={active} />
                 <MenuItem path="/logout" label="Logout" iconName="door-open" menuStatus={active}/>

@@ -21,3 +21,12 @@
     border: none;
     background-color: transparent;
 }
+.btn-node {
+    width: 35px;
+    height: 35px;
+    font-size: 1.3rem;
+    position: relative;
+    padding: 0;
+    background: transparent;
+    border: none;
+}

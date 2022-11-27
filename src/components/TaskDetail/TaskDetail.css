@@ -1,0 +1,10 @@
+@import "~react-image-gallery/styles/css/image-gallery.css";
+
+details summary {
+    cursor: pointer;
+    transition: margin 150ms ease-out;
+  }
+  
+  details[open] summary {
+    margin-bottom: 10px;
+  }

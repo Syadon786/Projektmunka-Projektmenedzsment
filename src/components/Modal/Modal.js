@@ -1,9 +1,10 @@
 import React from 'react'
+import { forwardRef } from 'react'
 import Button from '../Button/Button'
 
-const Modal = ({id, title, children, btnColor="primary", approveText, approveFunc}) => {
+const Modal = forwardRef(({id, title, children, btnColor="primary", approveText, approveFunc, className, hide=false}, ref) => {
     return (
-        <div className="modal fade" tabIndex="-1" id={id}>
+        <div className={`modal fade ${className ? className : ""}`} ref={ref} tabIndex="-1" id={id}>
             <div className="modal-dialog">
                 <div className="modal-content">
                 <div className="modal-header">
@@ -15,12 +16,13 @@ const Modal = ({id, title, children, btnColor="primary", approveText, approveFun
                 </div>              
                 <div className="modal-footer">
                     <Button color="secondary" data-bs-dismiss="modal">Close</Button>
-                    <Button color={btnColor} data-bs-dismiss="modal" onClick={() => approveFunc()}>{approveText}</Button>
+                    {hide ? <></>   
+                    : <Button color={btnColor} data-bs-dismiss="modal" onClick={() => approveFunc()}>{approveText}</Button> }             
                 </div>
                 </div>
             </div>
         </div>
       )
-}
+})
 
 export default Modal

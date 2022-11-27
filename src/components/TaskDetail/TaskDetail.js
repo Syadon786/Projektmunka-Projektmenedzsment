@@ -1,8 +1,8 @@
-import React, {useRef} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import Button from '../Button/Button';
 import AvatarGroup from '@atlaskit/avatar-group';
 import ImageGallery from 'react-image-gallery';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 import request from '../../util/request';
 
@@ -15,7 +15,8 @@ const TaskDetail = ({taskId, members, images, permissions, subtasks, title, desc
   const imageGallery = useRef(); 
   const {user} = useAuth();
   const {actProject} = useProject();
-
+  const [completed, setCompleted] = useState([]);
+  console.log("completed", completed);
   const handleImageDelete = async (url) => {
     const assetName = url.substring(61).split('.')[0];
     const res = await request.delete(`/task/${taskId}/image`, {
@@ -31,6 +32,10 @@ const TaskDetail = ({taskId, members, images, permissions, subtasks, title, desc
     }
     refreshGallery(prev => !prev);
   }
+
+  useEffect(() => {
+    setCompleted(new Array(subtasks?.length ? subtasks.length : 0).fill(false));
+  }, [taskId, subtasks])
 
   return (
     <>
@@ -51,10 +56,20 @@ const TaskDetail = ({taskId, members, images, permissions, subtasks, title, desc
       <h6>Subtasks:</h6>
       <div className="mb-4">
         <ul className="list-group">
-        {subtasks ? subtasks.map((task, index) => { return(
+        {subtasks && completed.length > 0 ? subtasks.map((task, index) => { return(
           <li className="list-group-item" key={index}>
-             {task}
-          </li>
+            <div className="form-check form-check-inline">
+             <label className="form-check-label ms-4">
+              {completed?.[index] ? <del>{`${task}`}</del> : `${task}`}
+              </label>
+             <input className="form-check-input" type="checkbox" checked={completed[index]}
+              onChange={() => {
+                const data = [...completed];
+                data[index] = !data?.[index];
+                setCompleted(data);
+              }}/>
+             </div>
+          </li>       
         )}) : <>This task does not have subtasks.</>}
         </ul>
       </div>  

@@ -17,7 +17,7 @@ import "./TaskEdit.css";
 import { useAuth } from '../../contexts/AuthContext';
 import { useProject } from '../../contexts/ProjectContext';
 
-const TaskEdit = ({taskId, members, permissions, images, setImages, users, prevSubtasks, title, desc, endDate, setTasksToDelete, setEditMode,
+const TaskEdit = ({taskId, members, children, permissions, images, setImages, users, prevSubtasks, title, desc, endDate, setTasksToDelete, setEditMode,
     treeData, path, setTreeData, removeNode, setTasksToUpdate, refreshGallery}) => {
     const getNodeKey = ({ treeIndex }) => treeIndex;
     const [taskName, setTaskName] = useState(title);
@@ -27,7 +27,7 @@ const TaskEdit = ({taskId, members, permissions, images, setImages, users, prevS
     const [selectedUsers, setSelectedUsers] = useState("");
     const {user} = useAuth();
     const {actProject} = useProject();
-  
+    console.log("children", children);
     useEffect(() => {
         if(prevSubtasks) {
             setSubtasks([...prevSubtasks]);
@@ -58,6 +58,14 @@ const TaskEdit = ({taskId, members, permissions, images, setImages, users, prevS
 
     }
 
+    const handleUpdateSubtasks = (subtasks) => {
+        setSubtasks(subtasks);
+    }
+
+    useEffect(() => {
+        console.log("subs", subtasks);
+    }, [subtasks])
+
     const onDrop = async picture => {
         console.log(picture);
         const data = {...images};
@@ -76,9 +84,14 @@ const TaskEdit = ({taskId, members, permissions, images, setImages, users, prevS
       const updatedTask = {taskId: taskId, title: taskName, description: description, 
         endDate: newEndDate.toLocaleDateString('en-EN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
         members: [...members.map(member => member.email), ...(selectedUsers.slice(1).trim().split("@").map((act) => act.trim()+"@gmail.com"))], 
-        subtasks: [...subtasks],
+        children: children ? [...children] : [],
+        expanded: true,
+        subtasks: [...subtasks.filter(task => task !== '')],
         };
 
+      axios.all([  
+      ...prevSubtasks.filter(task => !subtasks.includes(task)).map(task => request.delete(`/task/${taskId}/subtask/${task.id}`))]);      
+      
       setTasksToUpdate((prev) => [...prev, updatedTask]);
       setTreeData(changeNodeAtPath({treeData: treeData,
             path: path,
@@ -130,7 +143,7 @@ const TaskEdit = ({taskId, members, permissions, images, setImages, users, prevS
                 <div className="form-group mt-2">
                 <label>Subtasks:</label>
                     <div className="">
-                        <DynamicInput fieldData={subtasks} setFieldData={setSubtasks}/>
+                        <DynamicInput fieldData={subtasks} setFieldData={(subtasks) => handleUpdateSubtasks(subtasks)}/>
                     </div>
                 </div>
                 <div className="form-group mt-2">

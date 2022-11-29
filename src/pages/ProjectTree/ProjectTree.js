@@ -113,7 +113,7 @@ const ProjectTree = () => {
             endDate: task.endDate,
             description: task.description,
             members: task.members,
-            subtasks: task.subtasks.filter(subtask => subtask !== "")
+            subtasks: task.subtasks
           })
         }),
       ]).then(axios.spread((...response) => {
@@ -226,7 +226,7 @@ const ProjectTree = () => {
 
         <TaskModal title="Create a New Task"  users={users} treeData={treeData} rowInfo={actRowInfo} setTreeData={setTreeData} setNewTask={setNewTasks}/>
     
-        <TaskDetailModal path={actRowInfo.path} newTasks={newTasks} permissions={permissions} title={actRowInfo.node.title} subtasks={actRowInfo.node.subtasks} users={users} desc={actRowInfo.node.description} taskId={actRowInfo.node.taskId} 
+        <TaskDetailModal path={actRowInfo.path} newTasks={newTasks} children={actRowInfo.node.children} permissions={permissions} title={actRowInfo.node.title} subtasks={actRowInfo.node.subtasks} users={users} desc={actRowInfo.node.description} taskId={actRowInfo.node.taskId} 
         endDate={actRowInfo.node.endDate} refresh={refreshModal} 
         setTreeData={setTreeData} treeData={treeData} removeNode={removeNodeAtPath} setTasksToDelete={setTasksToDelete} setTasksToUpdate={setTasksToUpdate}></TaskDetailModal>
         <TaskUserModal projectId={actProject.value} taskTitle={actRowInfo.node.title} taskId={actRowInfo.node.taskId} refreshPermissions={setRefreshPermissions} refreshTaskMembers={refreshTaskMembers} permissions={permissions} setPermissions={setPermissions}/>

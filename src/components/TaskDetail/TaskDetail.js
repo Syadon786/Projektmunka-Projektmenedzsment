@@ -16,7 +16,7 @@ const TaskDetail = ({taskId, members, images, permissions, subtasks, title, desc
   const {user} = useAuth();
   const {actProject} = useProject();
   const [completed, setCompleted] = useState([]);
-  console.log("completed", completed);
+  const [refresh, setRefresh] = useState(false);
   const handleImageDelete = async (url) => {
     const assetName = url.substring(61).split('.')[0];
     const res = await request.delete(`/task/${taskId}/image`, {
@@ -34,8 +34,19 @@ const TaskDetail = ({taskId, members, images, permissions, subtasks, title, desc
   }
 
   useEffect(() => {
-    setCompleted(new Array(subtasks?.length ? subtasks.length : 0).fill(false));
-  }, [taskId, subtasks])
+     const fetchCompletedSubtasks = async () => {
+        const res = await request.get(`/task/${taskId}/subtask/complete`);
+        if(res.data) {
+          console.log("fetched", res.data);
+          if(res.data.completedTasks.length > 0) {
+            setCompleted([...res.data.completedTasks]);
+          }     
+        }
+     } 
+     if(taskId) {
+       fetchCompletedSubtasks();
+     }
+  }, [taskId, refresh])
 
   return (
     <>
@@ -56,17 +67,22 @@ const TaskDetail = ({taskId, members, images, permissions, subtasks, title, desc
       <h6>Subtasks:</h6>
       <div className="mb-4">
         <ul className="list-group">
-        {subtasks && completed.length > 0 ? subtasks.map((task, index) => { return(
-          <li className="list-group-item" key={index}>
+        {subtasks ? subtasks.map((task, index) => { return(
+          <li className="list-group-item" key={task.id}>
             <div className="form-check form-check-inline">
              <label className="form-check-label ms-4">
-              {completed?.[index] ? <del>{`${task}`}</del> : `${task}`}
+              {completed.filter(sb => sb.id === task.id).length > 0 ? completed.find(sb => sb.id === task.id).completed ? <del>{`${task.text}`}</del> 
+              : `${task.text}` : `${task.text}`}
               </label>
-             <input className="form-check-input" type="checkbox" checked={completed[index]}
-              onChange={() => {
-                const data = [...completed];
-                data[index] = !data?.[index];
-                setCompleted(data);
+             <input className="form-check-input" type="checkbox" value={task.id} checked={
+              completed.filter(sb => sb.id === task.id).length > 0 ? completed.find(sb => sb.id === task.id).completed : false
+             }
+              onChange={async (e) => {
+                console.log(completed.filter(sb => sb.id === task.id));
+                 await request.patch(`/task/${taskId}/subtask/complete/${e.target.value}`, {
+                  ticked:  completed.filter(sb => sb.id === task.id).length > 0 ? !completed.find(sb => sb.id === task.id).completed : true
+                 })
+                 setRefresh(prev => !prev);      
               }}/>
              </div>
           </li>       

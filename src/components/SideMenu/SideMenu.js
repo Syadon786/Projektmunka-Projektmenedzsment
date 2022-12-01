@@ -40,7 +40,7 @@ const SideMenu = () => {
     const configIndex = active ? "active" : "inactive";
 
     return (  
-    <div className={`side-menu ${SideMenuConfig[configIndex].status}`}>
+    <div className={`side-menu ${SideMenuConfig[configIndex].status}`}>        
         <div className="top-section">
             <div className="logo">
                 <img src={logo} alt="logo"/>
@@ -48,6 +48,10 @@ const SideMenu = () => {
             <div className="toggle-menu-btn" onClick={toggleMenu}>
                 <i className={`bi bi-arrow-${SideMenuConfig[configIndex].toggleAlignment}-square-fill`}></i>
             </div>
+            <div className="toggle-menu-btn-mobile" onClick={toggleMenu}>
+                <i className={`bi bi-list`}></i>
+            </div>
+            
         </div>
 
         {Object.keys(actProject).length === 0 ? null : <Select/>}

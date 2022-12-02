@@ -1,0 +1,12 @@
+@media screen and (max-width: 500px) {
+    .container.pt-3{
+        padding: 0;
+    }
+    .col-md-8{
+        padding: 0;
+    }
+    .content{
+        margin-left: 10px;
+    }
+
+}

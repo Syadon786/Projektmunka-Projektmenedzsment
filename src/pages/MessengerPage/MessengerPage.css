@@ -60,3 +60,16 @@
     cursor: default;
 }
 
+@media screen and (max-width: 991px) {
+    .App .css-3osv1q-Stack {
+        display: none;
+    }
+    .App .chatMenu {
+        flex: 2 1;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+    .App .conversation {
+        padding: 5px;
+    }
+}

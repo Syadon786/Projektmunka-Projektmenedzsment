@@ -3,7 +3,9 @@ import Button from '../../components/Button/Button'
 import Page from '../../components/Page/Page'
 
 import classes from "./LoginPage.module.css";
+import "./LoginPage.css";
 import googleLogo from  "../../assets/icons8-google-48.png";
+
 
 const LoginPage = () => {
   const login = () => {

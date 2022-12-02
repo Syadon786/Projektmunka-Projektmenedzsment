@@ -20,3 +20,8 @@
 .loginContainer {
     position: relative;
 }
+@media screen and (max-width: 500px) {
+    .loginWindow{
+        min-width: 350px;
+    }
+}

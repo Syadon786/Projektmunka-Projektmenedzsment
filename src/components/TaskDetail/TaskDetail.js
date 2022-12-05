@@ -1,8 +1,8 @@
-import React, {useRef} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import Button from '../Button/Button';
 import AvatarGroup from '@atlaskit/avatar-group';
 import ImageGallery from 'react-image-gallery';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 import request from '../../util/request';
 
@@ -15,7 +15,8 @@ const TaskDetail = ({taskId, members, images, permissions, subtasks, title, desc
   const imageGallery = useRef(); 
   const {user} = useAuth();
   const {actProject} = useProject();
-
+  const [completed, setCompleted] = useState([]);
+  const [refresh, setRefresh] = useState(false);
   const handleImageDelete = async (url) => {
     const assetName = url.substring(61).split('.')[0];
     const res = await request.delete(`/task/${taskId}/image`, {
@@ -31,6 +32,21 @@ const TaskDetail = ({taskId, members, images, permissions, subtasks, title, desc
     }
     refreshGallery(prev => !prev);
   }
+
+  useEffect(() => {
+     const fetchCompletedSubtasks = async () => {
+        const res = await request.get(`/task/${taskId}/subtask/complete`);
+        if(res.data) {
+          console.log("fetched", res.data);
+          if(res.data.completedTasks.length > 0) {
+            setCompleted([...res.data.completedTasks]);
+          }     
+        }
+     } 
+     if(taskId) {
+       fetchCompletedSubtasks();
+     }
+  }, [taskId, refresh])
 
   return (
     <>
@@ -52,9 +68,24 @@ const TaskDetail = ({taskId, members, images, permissions, subtasks, title, desc
       <div className="mb-4">
         <ul className="list-group">
         {subtasks ? subtasks.map((task, index) => { return(
-          <li className="list-group-item" key={index}>
-             {task}
-          </li>
+          <li className="list-group-item" key={task.id}>
+            <div className="form-check form-check-inline">
+             <label className="form-check-label ms-4">
+              {completed.filter(sb => sb.id === task.id).length > 0 ? completed.find(sb => sb.id === task.id).completed ? <del>{`${task.text}`}</del> 
+              : `${task.text}` : `${task.text}`}
+              </label>
+             <input className="form-check-input" type="checkbox" value={task.id} checked={
+              completed.filter(sb => sb.id === task.id).length > 0 ? completed.find(sb => sb.id === task.id).completed : false
+             }
+              onChange={async (e) => {
+                console.log(completed.filter(sb => sb.id === task.id));
+                 await request.patch(`/task/${taskId}/subtask/complete/${e.target.value}`, {
+                  ticked:  completed.filter(sb => sb.id === task.id).length > 0 ? !completed.find(sb => sb.id === task.id).completed : true
+                 })
+                 setRefresh(prev => !prev);      
+              }}/>
+             </div>
+          </li>       
         )}) : <>This task does not have subtasks.</>}
         </ul>
       </div>  

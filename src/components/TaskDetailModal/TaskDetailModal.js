@@ -6,7 +6,7 @@ import TaskEdit from '../TaskEdit/TaskEdit';
 
 import request from '../../util/request';
 
-const TaskDetailModal = ({taskId, refresh, permissions, users, path, title, desc, subtasks, endDate, treeData, setTreeData, removeNode, setTasksToDelete, setTasksToUpdate, newTasks}) => {
+const TaskDetailModal = ({taskId, refresh, children, permissions, users, path, title, desc, subtasks, endDate, treeData, setTreeData, removeNode, setTasksToDelete, setTasksToUpdate, newTasks}) => {
 
     const [editMode, setEditMode] = useState(false);
     const [members, setMembers] = useState([]);
@@ -15,29 +15,10 @@ const TaskDetailModal = ({taskId, refresh, permissions, users, path, title, desc
     const [refreshGallery, setRefreshGallery] = useState(false);
     const taskDetailModal = useRef();
 
-
-    // const newPath = [...path];
-    // newPath.splice(-1, 1);
-    // // newPath is the path of the parent, starting from the current node.
-
-    // const parentNode = getNodeAtPath({
-    //     treeData,
-    //     path: newPath,
-    //     getNodeKey,
-    // }).node;
-
-    // console.log(parentNode)
-
-   useEffect(() => {
-      console.log(editMode);
-      console.log(permissions);
-   }, [editMode]);  
-
    useEffect(() => {
        const fetchImageUrls = async () => {
           const res = await request.get(`/task/${taskId}/images`);
           if(res.data) {
-            console.log(res.data);
             setImageUrls([...res.data.images.map(imgUrl => ({
               original:  imgUrl,
               thumbnail: `https://res.cloudinary.com/duvvax1vs/image/upload/c_thumb,w_200,g_face/${imgUrl.substring(49)}`
@@ -54,14 +35,6 @@ const TaskDetailModal = ({taskId, refresh, permissions, users, path, title, desc
         }
        }
    }, [refreshGallery, taskId, newTasks])
-
-   useEffect(() => {
-    console.log(imageUrls);
-   }, [imageUrls])
-
-   useEffect(() => {
-    console.log("images", images);
-   }, [images])
 
    useEffect(() => {
        if(taskId) {
@@ -97,7 +70,7 @@ const TaskDetailModal = ({taskId, refresh, permissions, users, path, title, desc
                 <div className="modal-content">
                     {
                     editMode ? 
-                    <TaskEdit taskId={taskId} permissions={permissions} images={images} setImages={setImages} users={users} members={members} 
+                    <TaskEdit taskId={taskId} children={children} permissions={permissions} images={images} setImages={setImages} users={users} members={members} 
                     prevSubtasks={subtasks} title={title} endDate={endDate} desc={desc} setTasksToDelete={setTasksToDelete} 
                     treeData={treeData} path={path} setTreeData={setTreeData} removeNode={removeNode} setTasksToUpdate={setTasksToUpdate} 
                     refreshGallery={setRefreshGallery}

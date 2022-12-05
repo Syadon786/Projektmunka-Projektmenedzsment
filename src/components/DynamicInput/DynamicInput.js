@@ -1,11 +1,12 @@
 import React from 'react'
 import Button from '../Button/Button';
+import { v4 as uuidv4 } from 'uuid';
 
 const DynamicInput = ({fieldData, setFieldData}) => {
 
   const handleFormChange = (event, index) => {
       let data = [...fieldData];
-      data[index] = event.target.value;
+      data[index] = {text: event.target.value, id: uuidv4()};
       setFieldData(data);
   }
 
@@ -25,7 +26,7 @@ const DynamicInput = ({fieldData, setFieldData}) => {
         <div key={index} className="input-group mt-2">
             <input className="form-control" placeholder="Add Subtask" 
             onChange={event => handleFormChange(event, index)}
-            value={field}
+            value={field?.text ? field.text : ''}
             />
             <button  onClick={() => {
               removeField(index);

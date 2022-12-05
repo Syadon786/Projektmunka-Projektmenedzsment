@@ -78,6 +78,9 @@ const ProjectProvider = ({children}) => {
               return {id: task.id, progress: completed / (completed + todo) * 100};
           })])
       }
+      else {
+        setProgressMap([]);
+      }
   }, [descendantMap, tasks])
 
   const fetchProjectsData = useCallback(async () => {

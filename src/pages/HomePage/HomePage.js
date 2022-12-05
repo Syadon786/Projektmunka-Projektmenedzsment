@@ -27,7 +27,6 @@ const HomePage = () => {
   const [chartValues, setChartValues] = useState([]);
   const [selected, setSelected] = useState(-1);
   const navigate = useNavigate();
-
   useEffect(() => {
     const fetchUsers = async () => {
         const res = await request.post('/users', {
@@ -77,8 +76,10 @@ const HomePage = () => {
            lateCount += 1;
          }
       })
-      console.log(progressMap);
       setChartValues([tasksCount - completedCount - lateCount, completedCount, lateCount]);
+    } 
+    else {
+       setChartValues([]);
     }
   }, [progressMap, tasks])
   
@@ -102,7 +103,12 @@ const HomePage = () => {
             {chartValues.length > 0 ? 
             <>
               <p className='fs-5' style={{position: "absolute"}}>Task Statistics: </p>
-              <PieChart  label={({ dataEntry }) => `${Math.round(dataEntry.percentage)} %`} 
+              
+              <PieChart  label={({ dataEntry }) => { 
+                if(dataEntry.percentage === 0) 
+                  return "";
+               return `${Math.round(dataEntry.percentage)} %` 
+              }} 
               lineWidth={60}
               labelPosition={100 - 60 / 2}
               viewBoxSize={[100, 100]}
@@ -127,7 +133,7 @@ const HomePage = () => {
                 />
             </>
             : 
-            <></>}  
+            <><p className='fs-5'>There is no task yet.</p></>}  
             </div>
           </div>
           <div className="col-lg-5 col-md-10 ms-lg-4 col-sm-10 card my-4 p-4 bg-white shadow text-center">
